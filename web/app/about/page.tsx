@@ -16,7 +16,7 @@ export default function AboutPage() {
           </Link>
           <h1 className="text-3xl md:text-5xl font-bold mb-4">About KGIC</h1>
           <p className="text-muted-foreground text-lg max-w-prose">
-            The King's Generals International Church is a Christ-centered church committed to birthing God's army of visionaries for worldwide reformation.
+            The King&#39;s Generals International Church is a Christ-centered church committed to birthing God&#39;s army of visionaries for worldwide reformation.
           </p>
         </div>
 
@@ -25,7 +25,7 @@ export default function AboutPage() {
           <div className="rounded-xl border border-border bg-card p-6">
             <h2 className="text-2xl font-bold mb-4 text-accent">Our Vision</h2>
             <p className="text-muted-foreground">
-              To birth God's army of Visionaries for a worldwide Christ centered reformation.
+              To birth God&#39;s army of Visionaries for a worldwide Christ centered reformation.
             </p>
           </div>
         </section>
