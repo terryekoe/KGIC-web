@@ -1,0 +1,127 @@
+"use client";
+
+import { Download, PlayCircle, PauseCircle } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+
+interface PodcastCardProps {
+  id: number;
+  title: string;
+  date: string;
+  duration: string;
+  audioUrl: string;
+  artist?: string;
+}
+
+export function PodcastCard({ title, date, duration, audioUrl, artist = "KGIC" }: PodcastCardProps) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [totalDuration, setTotalDuration] = useState(0);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateTime = () => setCurrentTime(audio.currentTime);
+    const updateDuration = () => setTotalDuration(audio.duration);
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
+    const onEnded = () => setIsPlaying(false);
+
+    audio.addEventListener("timeupdate", updateTime);
+    audio.addEventListener("loadedmetadata", updateDuration);
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
+    audio.addEventListener("ended", onEnded);
+
+    return () => {
+      audio.removeEventListener("timeupdate", updateTime);
+      audio.removeEventListener("loadedmetadata", updateDuration);
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
+      audio.removeEventListener("ended", onEnded);
+    };
+  }, []);
+
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch(() => setIsPlaying(false));
+    }
+  };
+
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const audio = audioRef.current;
+    if (!audio || !totalDuration) return;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const width = rect.width;
+    const newTime = (clickX / width) * totalDuration;
+    
+    audio.currentTime = newTime;
+  };
+
+  const formatTime = (time: number) => {
+    if (!time || isNaN(time)) return "0:00";
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  const progress = totalDuration > 0 ? (currentTime / totalDuration) * 100 : 0;
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-6">
+      <div className="flex items-start justify-between gap-4 mb-4">
+        <div className="flex-1 min-w-0">
+          <h3 className="font-semibold text-lg truncate">{title}</h3>
+          <p className="text-muted-foreground text-sm mt-1">
+            {artist} • {date} • {duration}
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <button 
+            onClick={togglePlay}
+            className="inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground font-semibold px-4 py-2 hover:opacity-90"
+          >
+            {isPlaying ? <PauseCircle className="w-5 h-5" /> : <PlayCircle className="w-5 h-5" />}
+            {isPlaying ? "Pause" : "Play"}
+          </button>
+          <a 
+            download 
+            href={audioUrl} 
+            className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 hover:bg-muted"
+          >
+            <Download className="w-4 h-4" />
+            Download
+          </a>
+        </div>
+      </div>
+
+      {/* Progress Bar */}
+      <div className="space-y-2">
+        <div 
+          className="w-full h-2 bg-muted rounded-full cursor-pointer"
+          onClick={handleProgressClick}
+        >
+          <div 
+            className="h-2 bg-accent rounded-full transition-all duration-150"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        <div className="flex justify-between text-xs text-muted-foreground">
+          <span>{formatTime(currentTime)}</span>
+          <span>{formatTime(totalDuration)}</span>
+        </div>
+      </div>
+
+      {/* Hidden audio element */}
+      <audio ref={audioRef} src={audioUrl} preload="metadata" />
+    </div>
+  );
+}
