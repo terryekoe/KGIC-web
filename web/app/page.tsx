@@ -240,7 +240,7 @@ function RecentPodcast() {
     <div className="rounded-xl border border-border bg-card p-6">
       <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4 mb-4">
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-lg truncate">
+          <h3 className="font-semibold text-lg break-words whitespace-normal">
             {loading ? "Loading..." : episode?.title || "No recent podcast"}
           </h3>
           <p className="text-muted-foreground text-sm mt-1 break-words">
@@ -356,14 +356,14 @@ function RecentPrayer() {
 
   return (
     <div className="rounded-xl border border-border bg-card p-6">
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
         <div className="flex-1">
           <span className="inline-flex items-center text-xs font-medium text-accent mb-2">Recently Posted Morning Prayer</span>
-          <h3 className="font-semibold text-lg mb-1">{loading ? "Loading..." : prayer?.title || "No recent prayer"}</h3>
-          <p className="text-muted-foreground text-sm mb-3">{loading ? "Please wait while we fetch the latest prayer." : (prayer?.excerpt || "Check back soon for today's prayer.")}</p>
+          <h3 className="font-semibold text-lg mb-1 break-words whitespace-normal">{loading ? "Loading..." : prayer?.title || "No recent prayer"}</h3>
+          <p className="text-muted-foreground text-sm mb-3 break-words whitespace-normal">{loading ? "Please wait while we fetch the latest prayer." : (prayer?.excerpt || "Check back soon for today's prayer.")}</p>
           <span className="text-muted-foreground text-xs">{loading ? "" : (prayer?.date || "")}</span>
         </div>
-        <Link href="/prayers" className="self-start inline-flex items-center rounded-full bg-accent text-accent-foreground font-semibold px-4 py-2 hover:opacity-90">
+        <Link href="/prayers" className="w-full sm:w-auto self-stretch sm:self-start inline-flex justify-center items-center rounded-full bg-accent text-accent-foreground font-semibold px-4 py-2 hover:opacity-90 mt-3 sm:mt-0">
           Read now
         </Link>
       </div>

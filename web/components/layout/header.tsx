@@ -6,6 +6,7 @@ import Image from "next/image";
 import React from "react";
 import { useTheme } from "@/components/ui/theme-provider";
 import { Moon, Sun } from "lucide-react";
+import { createPortal } from "react-dom";
 
 interface HeaderProps {
   className?: string;
@@ -147,8 +148,8 @@ export function Header({ className = "" }: HeaderProps) {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
-      {menuOpen && (
+      {/* Mobile Menu Overlay via Portal */}
+      {menuOpen && typeof window !== 'undefined' && createPortal(
         <div className="fixed inset-0 z-[60] bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur-sm overflow-y-auto">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 min-h-full flex flex-col">
             <div className="flex items-center justify-between py-3 sticky top-0 bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur-sm border-b border-border">
@@ -185,7 +186,8 @@ export function Header({ className = "" }: HeaderProps) {
               </button>
             </nav>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </header>
   );

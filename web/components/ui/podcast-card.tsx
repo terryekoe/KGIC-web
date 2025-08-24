@@ -79,7 +79,7 @@ export function PodcastCard({ title, date, duration, audioUrl, artist = "KGIC" }
     <div className="rounded-xl border border-border bg-card p-6">
       <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4 mb-4">
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-lg truncate">{title}</h3>
+          <h3 className="font-semibold text-lg break-words whitespace-normal">{title}</h3>
           <p className="text-muted-foreground text-sm mt-1 break-words">
             {artist} • {date} • {duration}
           </p>
