@@ -7,7 +7,7 @@ import { FileText, Mic, Calendar, Image, Settings, Moon, Sun, LogIn, LogOut, Meg
 import { useTheme } from "@/components/ui/theme-provider";
 import { getSupabaseClient } from "@/lib/supabaseClient";
 import Link from "next/link";
-// import NextImage from "next/image";
+import NextImage from "next/image";
 import React from "react";
 import { useRouter } from "next/navigation";
 
