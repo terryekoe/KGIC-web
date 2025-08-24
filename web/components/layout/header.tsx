@@ -103,6 +103,9 @@ export function Header({ className = "" }: HeaderProps) {
             <Link href="/ministries" className={isActive("/ministries") ? "text-accent" : "hover:text-accent"}>
               Ministries
             </Link>
+            <Link href="/book-store" className={isActive("/book-store") ? "text-accent" : "hover:text-accent"}>
+              Book Store
+            </Link>
             <Link href="/about" className={isActive("/about") ? "text-accent" : "hover:text-accent"}>
               About
             </Link>
@@ -180,6 +183,7 @@ export function Header({ className = "" }: HeaderProps) {
               <Link href="/podcasts" onClick={() => setMenuOpen(false)} className={isActive("/podcasts") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Podcasts</Link>
               <Link href="/events" onClick={() => setMenuOpen(false)} className={isActive("/events") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Events</Link>
               <Link href="/ministries" onClick={() => setMenuOpen(false)} className={isActive("/ministries") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Ministries</Link>
+              <Link href="/book-store" onClick={() => setMenuOpen(false)} className={isActive("/book-store") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Book Store</Link>
               <Link href="/about" onClick={() => setMenuOpen(false)} className={isActive("/about") ? "text-accent" : "text-foreground/90 hover:text-accent"}>About</Link>
               <Link href="/contact" onClick={() => setMenuOpen(false)} className={isActive("/contact") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Contact</Link>
               <button
