@@ -15,7 +15,7 @@ const robotoMono = Roboto_Mono({
 
 export const metadata: Metadata = {
   title: "The King's Generals International Church (KGIC)",
-  description: "Bold, modern church web app for morning prayers, podcasts, and events.",
+  description: "responsible kingdom labourers",
 };
 
 export default function RootLayout({
@@ -31,7 +31,6 @@ export default function RootLayout({
         {/* Theme Provider */}
         {/* eslint-disable-next-line react/no-unknown-property */}
         <div suppressHydrationWarning>
-          {/* @ts-expect-error Server/Client boundary wrapper */}
           <ThemeProvider>{children}</ThemeProvider>
         </div>
       </body>

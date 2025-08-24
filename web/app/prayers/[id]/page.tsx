@@ -70,7 +70,7 @@ export default function PrayerDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-[100svh] bg-background text-foreground">
       <Header />
       <main className="mx-auto max-w-4xl px-6 py-8">
         <div className="mb-8">

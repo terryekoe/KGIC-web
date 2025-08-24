@@ -24,13 +24,23 @@ export function Header({ className = "" }: HeaderProps) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Lock body scroll when the mobile menu is open
+  React.useEffect(() => {
+    if (!menuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [menuOpen]);
+
   const isActive = (path: string) => pathname === path;
 
   return (
     <header className={`w-full sticky top-0 z-50 transition-colors ${
       scrolled ? 'border-b border-border bg-background/70 backdrop-blur' : 'bg-transparent border-b-0'
     } ${className}`}>
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[auto_1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-4">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-2 sm:py-3 grid grid-cols-[auto_1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-4">
         {/* Mobile: Hamburger */}
         <div className="md:hidden">
           <button
@@ -77,6 +87,7 @@ export function Header({ className = "" }: HeaderProps) {
               height={72}
               className="rounded-sm sm:w-[80px] sm:h-[80px] md:w-[96px] md:h-[96px] w-[72px] h-[72px]"
               sizes="(min-width: 768px) 96px, (min-width: 640px) 80px, 72px"
+              priority
             />
           </Link>
 
@@ -118,9 +129,10 @@ export function Header({ className = "" }: HeaderProps) {
           <Image
             src="/logo.png"
             alt="KGIC logo"
-            width={72}
-            height={72}
-            className="rounded-sm w-[72px] h-[72px]"
+            width={56}
+            height={56}
+            className="rounded-sm w-12 h-12 sm:w-16 sm:h-16"
+            sizes="(min-width: 640px) 64px, 48px"
           />
         </Link>
 
@@ -137,9 +149,9 @@ export function Header({ className = "" }: HeaderProps) {
 
       {/* Mobile Menu Overlay */}
       {menuOpen && (
-        <div className="fixed inset-0 z-[60] bg-background/80 backdrop-blur-sm">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="flex items-center justify-between py-3">
+        <div className="fixed inset-0 z-[60] bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur-sm overflow-y-auto">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 min-h-full flex flex-col">
+            <div className="flex items-center justify-between py-3 sticky top-0 bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur-sm border-b border-border">
               <span className="text-foreground/80">Menu</span>
               <button
                 type="button"
@@ -153,7 +165,7 @@ export function Header({ className = "" }: HeaderProps) {
                 </svg>
               </button>
             </div>
-            <nav className="pt-4 pb-10 flex flex-col items-center gap-4 text-lg">
+            <nav className="pt-6 pb-10 flex flex-col items-center gap-5 text-lg">
               <Link href="/" onClick={() => setMenuOpen(false)} className={isActive("/") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Home</Link>
               <Link href="/discover" onClick={() => setMenuOpen(false)} className={isActive("/discover") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Discover</Link>
               <Link href="/prayers" onClick={() => setMenuOpen(false)} className={isActive("/prayers") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Morning Prayer</Link>
@@ -161,16 +173,16 @@ export function Header({ className = "" }: HeaderProps) {
               <Link href="/events" onClick={() => setMenuOpen(false)} className={isActive("/events") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Events</Link>
               <Link href="/about" onClick={() => setMenuOpen(false)} className={isActive("/about") ? "text-accent" : "text-foreground/90 hover:text-accent"}>About</Link>
               <Link href="/contact" onClick={() => setMenuOpen(false)} className={isActive("/contact") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Contact</Link>
-             <button
-               onClick={() => {
-                 toggleTheme();
-                 setMenuOpen(false);
-               }}
-               className="flex items-center gap-2 text-foreground/90 hover:text-accent"
-             >
-               {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-               {theme === "dark" ? "Light Mode" : "Dark Mode"}
-             </button>
+              <button
+                onClick={() => {
+                  toggleTheme();
+                  setMenuOpen(false);
+                }}
+                className="flex items-center gap-2 text-foreground/90 hover:text-accent"
+              >
+                {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+                {theme === "dark" ? "Light Mode" : "Dark Mode"}
+              </button>
             </nav>
           </div>
         </div>

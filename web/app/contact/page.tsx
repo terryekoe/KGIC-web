@@ -5,7 +5,7 @@ import { Footer } from "@/components/layout/footer";
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-[100svh] bg-background text-foreground">
       <Header />
 
       <main className="mx-auto max-w-4xl px-6 py-8">
@@ -14,11 +14,11 @@ export default function ContactPage() {
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">Contact Us</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
           <p className="text-muted-foreground text-lg">We'd love to hear from you</p>
         </div>
 
-        <section className="grid md:grid-cols-2 gap-6">
+        <section className="grid sm:grid-cols-2 md:grid-cols-2 gap-6">
           <div className="rounded-xl border border-border bg-card p-6">
             <h3 className="font-semibold mb-2">Email</h3>
             <p className="text-muted-foreground text-sm inline-flex items-center gap-2">
@@ -37,7 +37,7 @@ export default function ContactPage() {
 
         <section className="mt-8">
           <form className="rounded-xl border border-border bg-card p-6 grid gap-4">
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-2 md:grid-cols-2 gap-4">
               <input placeholder="Full name" className="bg-transparent border border-border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent" />
               <input placeholder="Email" type="email" className="bg-transparent border border-border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent" />
             </div>

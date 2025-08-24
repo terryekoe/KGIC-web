@@ -5,7 +5,7 @@ import { Footer } from "@/components/layout/footer";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-[100svh] bg-background text-foreground">
       <Header />
 
       <main className="mx-auto max-w-4xl px-6 py-8">
@@ -14,7 +14,7 @@ export default function AboutPage() {
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">About KGIC</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">About KGIC</h1>
           <p className="text-muted-foreground text-lg max-w-prose">
             The King&#39;s Generals International Church is a Christ-centered church committed to birthing God&#39;s army of visionaries for worldwide reformation.
           </p>
@@ -43,7 +43,7 @@ export default function AboutPage() {
         </section>
 
         {/* Leadership & Location */}
-        <section className="grid md:grid-cols-2 gap-6">
+        <section className="grid sm:grid-cols-2 md:grid-cols-2 gap-6">
           <div className="rounded-xl border border-border bg-card p-6">
             <h3 className="font-semibold text-lg mb-3 text-accent">Leadership</h3>
             <div className="text-muted-foreground">

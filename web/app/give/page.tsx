@@ -5,7 +5,7 @@ import { Footer } from "@/components/layout/footer";
 
 export default function GivePage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-[100svh] bg-background text-foreground">
       <Header />
 
       <main className="mx-auto max-w-3xl px-6 py-8">
@@ -14,7 +14,7 @@ export default function GivePage() {
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
-          <h1 className="text-3xl md:text-5xl font-bold mb-2">Give</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2">Give</h1>
           <p className="text-muted-foreground text-lg">Partner with us to advance the Gospel and serve our community.</p>
         </div>
 

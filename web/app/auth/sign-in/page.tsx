@@ -67,10 +67,10 @@ function SignInInner() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-accent/5">
-      <div className="max-w-md mx-auto px-6 py-16 space-y-6">
+    <div className="min-h-[100svh] bg-gradient-to-b from-background via-background to-accent/5">
+      <div className="max-w-md mx-auto px-6 py-10 sm:py-14 space-y-6">
         <div className="flex justify-center">
-          <Image src="/logo.png" alt="KGIC logo" width={72} height={72} className="rounded-sm" />
+          <Image src="/logo.png" alt="KGIC logo" width={72} height={72} className="rounded-sm" sizes="(min-width: 640px) 72px, 72px" />
         </div>
 
         <Card className="border-border bg-card/50 backdrop-blur">
@@ -148,7 +148,7 @@ function SignInInner() {
 
 export default function SignInPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+    <Suspense fallback={<div className="min-h-[100svh] flex items-center justify-center">Loading...</div>}>
       <SignInInner />
     </Suspense>
   );

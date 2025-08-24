@@ -7,7 +7,7 @@ import { FileText, Mic, Calendar, Image, Settings, Moon, Sun, LogIn, LogOut, Meg
 import { useTheme } from "@/components/ui/theme-provider";
 import { getSupabaseClient } from "@/lib/supabaseClient";
 import Link from "next/link";
-import NextImage from "next/image";
+// import NextImage from "next/image";
 import React from "react";
 import { useRouter } from "next/navigation";
 
@@ -302,7 +302,7 @@ function AdminPrayers() {
           {error && <p className="text-sm text-destructive">{error}</p>}
           {success && <p className="text-sm text-green-600">{success}</p>}
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm text-muted-foreground" htmlFor="title">Title</label>
               <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
@@ -619,7 +619,7 @@ function AdminPodcasts() {
           {success && <p className="text-sm text-green-600">{success}</p>}
           {uploadError && <p className="text-sm text-destructive">{uploadError}</p>}
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm text-muted-foreground" htmlFor="p_title">Title</label>
               <Input id="p_title" value={title} onChange={(e) => setTitle(e.target.value)} required />
@@ -858,7 +858,7 @@ function AdminAnnouncements() {
           {error && <p className="text-sm text-destructive">{error}</p>}
           {success && <p className="text-sm text-green-600">{success}</p>}
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm text-muted-foreground" htmlFor="a_title">Title</label>
               <Input id="a_title" value={title} onChange={(e) => setTitle(e.target.value)} required />
@@ -1063,7 +1063,7 @@ function AdminMinistries() {
           {error && <p className="text-sm text-destructive">{error}</p>}
           {success && <p className="text-sm text-green-600">{success}</p>}
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm text-muted-foreground" htmlFor="m_name">Name</label>
               <Input id="m_name" value={name} onChange={(e) => setName(e.target.value)} required />
@@ -1259,7 +1259,7 @@ function AdminGroups() {
           {error && <p className="text-sm text-destructive">{error}</p>}
           {success && <p className="text-sm text-green-600">{success}</p>}
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm text-muted-foreground" htmlFor="g_name">Name</label>
               <Input id="g_name" value={name} onChange={(e) => setName(e.target.value)} required />
@@ -1379,14 +1379,14 @@ export default function AdminPage() {
 
   if (!authChecked || !authed) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+      <div className="min-h-[100svh] bg-background text-foreground flex items-center justify-center">
         <p className="text-sm text-muted-foreground">Checking authentication…</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-[100svh] bg-background text-foreground">
       <AdminTopBar />
 
       <main className="mx-auto max-w-6xl px-4 py-8">

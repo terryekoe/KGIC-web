@@ -79,7 +79,7 @@ function NextServiceCountdown() {
       <div className="text-center">
         <h3 className="text-accent font-semibold mb-1 text-xs sm:text-sm">Next Service</h3>
         <p className="text-foreground/90 text-[11px] sm:text-xs mb-2">{nextService}</p>
-        <div className="grid grid-cols-4 gap-2 sm:gap-3 text-center">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 text-center">
           <div className="bg-foreground/10 rounded-lg p-2">
             <div className="text-lg sm:text-xl md:text-2xl font-bold text-accent">{timeLeft.days}</div>
             <div className="text-[10px] sm:text-[11px] text-foreground/70">DAYS</div>
@@ -238,12 +238,12 @@ function RecentPodcast() {
 
   return (
     <div className="rounded-xl border border-border bg-card p-6">
-      <div className="flex items-start justify-between gap-4 mb-4">
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4 mb-4">
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-lg truncate">
             {loading ? "Loading..." : episode?.title || "No recent podcast"}
           </h3>
-          <p className="text-muted-foreground text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1 break-words">
             {episode ? (
               <>
                 {episode.artist} • {episode.date || ""} • {episode.durationLabel || ""}
@@ -253,11 +253,11 @@ function RecentPodcast() {
             )}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="w-full sm:w-auto grid grid-cols-2 gap-2 sm:flex sm:gap-2 mt-3 sm:mt-0">
           <button
             onClick={togglePlay}
             disabled={!hasEpisode}
-            className={`inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground font-semibold px-4 py-2 ${hasEpisode ? "hover:opacity-90" : "opacity-60 cursor-not-allowed"}`}
+            className={`w-full sm:w-auto inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground font-semibold px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base ${hasEpisode ? "hover:opacity-90" : "opacity-60 cursor-not-allowed"}`}
           >
             {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
             {isPlaying ? "Pause" : "Play"}
@@ -266,7 +266,7 @@ function RecentPodcast() {
             download
             href={hasEpisode ? episode!.audioUrl : "#"}
             aria-disabled={!hasEpisode}
-            className={`inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 ${hasEpisode ? "hover:bg-muted" : "opacity-60 pointer-events-none"}`}
+            className={`w-full sm:w-auto inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base ${hasEpisode ? "hover:bg-muted" : "opacity-60 pointer-events-none"}`}
           >
             <Download className="w-4 h-4" />
             Download
@@ -277,7 +277,7 @@ function RecentPodcast() {
       {/* Progress Bar */}
       <div className="space-y-2 mb-4">
         <div
-          className={`w-full h-2 rounded-full cursor-pointer ${hasEpisode ? "bg-muted" : "bg-muted/50 cursor-default"}`}
+          className={`w-full h-2 rounded-full ${hasEpisode ? "bg-muted cursor-pointer" : "bg-muted/50 cursor-default"}`}
           onClick={hasEpisode ? handleProgressClick : undefined}
         >
           <div
@@ -292,17 +292,17 @@ function RecentPodcast() {
       </div>
 
       {/* Additional Actions */}
-      <div className="flex gap-2">
+      <div className="grid grid-cols-2 sm:flex gap-2">
         <button
           onClick={onCopy}
-          className="inline-flex items-center gap-2 rounded-full bg-secondary-accent text-secondary-accent-foreground px-4 py-2 hover:opacity-90 text-sm"
+          className="w-full sm:w-auto inline-flex items-center gap-2 rounded-full bg-secondary-accent text-secondary-accent-foreground px-3 py-1.5 sm:px-4 sm:py-2 hover:opacity-90 text-sm sm:text-base"
         >
           <Link2 className="w-4 h-4" />
           {copied ? "Copied" : "Copy link"}
         </button>
         <button
           onClick={onShare}
-          className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 hover:bg-muted text-sm"
+          className="w-full sm:w-auto inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 sm:px-4 sm:py-2 hover:bg-muted text-sm sm:text-base"
         >
           <Share2 className="w-4 h-4" />
           Share
@@ -311,7 +311,7 @@ function RecentPodcast() {
 
       {/* Hidden audio element */}
       {hasEpisode ? (
-        <audio ref={audioRef} src={episode!.audioUrl} preload="metadata" />
+        <audio ref={audioRef} src={episode!.audioUrl} preload="metadata" aria-hidden="true" />
       ) : null}
     </div>
   );
@@ -394,13 +394,12 @@ export default function Home() {
   }, []);
 
   return (
-    // ... existing code ...
-    <div className="min-h-screen w-full bg-background text-foreground">
+    <div className="min-h-[100svh] w-full bg-background text-foreground">
       <Header />
 
       <main className="relative">
         {/* Hero with Background Slider */}
-        <section className="relative min-h-screen flex items-center overflow-hidden" style={{ marginTop: -headerHeight, paddingTop: headerHeight }}>
+        <section className="relative min-h-[100svh] flex items-center overflow-hidden" style={{ marginTop: -headerHeight, paddingTop: headerHeight }}>
           {/* Background Images */}
           <div className="absolute inset-0 z-0">
             {heroImages.map((image, index) => (
@@ -427,16 +426,16 @@ export default function Home() {
           </div>
 
           {/* Hero Content */}
-          <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 md:py-24">
+          <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 py-10 sm:py-14 md:py-24">
             <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center min-h-[60vh] sm:min-h-[70vh] lg:min-h-[80vh]">
               <div className="space-y-6 sm:space-y-8">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight">
+                <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight">
                   <span className="block text-foreground drop-shadow-lg">FIND JESUS</span>
                   <span className="block text-foreground drop-shadow-lg">FIND HOPE</span>
                   <span className="block text-accent drop-shadow-lg">FIND PURPOSE</span>
                 </h1>
                 <p className="text-foreground/90 text-base sm:text-lg md:text-2xl max-w-prose drop-shadow-md">
-                  We are a Christ-centered church raising responsible kingdom labourers for a worldwide reformation.
+                  We are a Christ-centered church raising responsible kingdom labourers.
                 </p>
                 <div className="flex flex-wrap gap-3 sm:gap-4">
                   <Link href="/prayers" className="inline-flex items-center rounded-full bg-accent text-accent-foreground font-semibold px-6 py-3 sm:px-7 sm:py-3.5 md:px-8 md:py-4 hover:bg-accent/90 transition-colors shadow-lg text-sm sm:text-base">
@@ -471,8 +470,8 @@ export default function Home() {
         </section>
 
         {/* Highlights */}
-        <section className="py-12 sm:py-16 bg-background">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 grid md:grid-cols-3 gap-4 sm:gap-6">
+        <section className="py-10 sm:py-14 bg-background">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             <div className="rounded-xl border border-border p-5 sm:p-6 bg-card">
               <h3 className="font-semibold text-base sm:text-lg">Morning Prayer</h3>
               <p className="text-sm text-muted-foreground mt-1.5 sm:mt-2">Start your day with a guided prayer. Updated daily.</p>
@@ -483,7 +482,7 @@ export default function Home() {
               <p className="text-sm text-muted-foreground mt-1.5 sm:mt-2">Listen to sermons and messages on the go.</p>
               <Link href="/podcasts" className="mt-3 sm:mt-4 inline-block text-accent">Play latest episode →</Link>
             </div>
-            <div className="rounded-xl border border-border p-5 sm:p-6 bg_card bg-card">
+            <div className="rounded-xl border border-border p-5 sm:p-6 bg-card">
               <h3 className="font-semibold text-base sm:text-lg">Events</h3>
               <p className="text-sm text-muted-foreground mt-1.5 sm:mt-2">Stay updated with what’s happening at KGIC.</p>
               <Link href="/events" className="mt-3 sm:mt-4 inline-block text-accent">See upcoming events →</Link>

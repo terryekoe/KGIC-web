@@ -155,7 +155,7 @@ export default function DiscoverPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-[100svh] bg-background text-foreground">
       <Header />
 
       <main className="mx-auto max-w-5xl px-6 py-8 space-y-8">
@@ -164,7 +164,7 @@ export default function DiscoverPage() {
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
-          <h1 className="text-3xl md:text-5xl font-bold mb-2">Discover</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2">Discover</h1>
           <p className="text-muted-foreground text-lg">Your weekly feed: announcements, serving, small groups, teaching, and devotions</p>
         </div>
 
@@ -205,8 +205,10 @@ export default function DiscoverPage() {
             <div className="aspect-video w-full overflow-hidden rounded-lg border border-border bg-background">
               <iframe
                 className="w-full h-full"
-                src={`https://www.youtube.com/embed/${YT_VIDEO_ID}`}
+                src={`https://www.youtube-nocookie.com/embed/${YT_VIDEO_ID}`}
                 title="KGIC YouTube"
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
               />

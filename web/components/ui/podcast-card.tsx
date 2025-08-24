@@ -77,17 +77,17 @@ export function PodcastCard({ title, date, duration, audioUrl, artist = "KGIC" }
 
   return (
     <div className="rounded-xl border border-border bg-card p-6">
-      <div className="flex items-start justify-between gap-4 mb-4">
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4 mb-4">
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-lg truncate">{title}</h3>
-          <p className="text-muted-foreground text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1 break-words">
             {artist} • {date} • {duration}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="w-full sm:w-auto grid grid-cols-2 gap-2 sm:flex sm:gap-2 mt-3 sm:mt-0">
           <button 
             onClick={togglePlay}
-            className="inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground font-semibold px-4 py-2 hover:opacity-90"
+            className="w-full sm:w-auto inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground font-semibold px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base hover:opacity-90"
           >
             {isPlaying ? <PauseCircle className="w-5 h-5" /> : <PlayCircle className="w-5 h-5" />}
             {isPlaying ? "Pause" : "Play"}
@@ -95,7 +95,7 @@ export function PodcastCard({ title, date, duration, audioUrl, artist = "KGIC" }
           <a 
             download 
             href={audioUrl} 
-            className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 hover:bg-muted"
+            className="w-full sm:w-auto inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base hover:bg-muted"
           >
             <Download className="w-4 h-4" />
             Download
@@ -121,7 +121,7 @@ export function PodcastCard({ title, date, duration, audioUrl, artist = "KGIC" }
       </div>
 
       {/* Hidden audio element */}
-      <audio ref={audioRef} src={audioUrl} preload="metadata" />
+      <audio ref={audioRef} src={audioUrl} preload="metadata" aria-hidden="true" />
     </div>
   );
 }

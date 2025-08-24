@@ -12,7 +12,7 @@ export default function EventsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-[100svh] bg-background text-foreground">
       <Header />
 
       <main className="mx-auto max-w-5xl px-6 py-8">
@@ -21,7 +21,7 @@ export default function EventsPage() {
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">Upcoming Events</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Upcoming Events</h1>
           <p className="text-muted-foreground text-lg">Join us and be part of the community</p>
         </div>
 
