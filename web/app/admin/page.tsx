@@ -560,6 +560,15 @@ function AdminPodcasts() {
   const handleAudioFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    // Validate format for broad browser compatibility (recommend MP3/M4A)
+    const ext = (file.name?.split(".").pop() || "").toLowerCase();
+    const mime = file.type;
+    const allowed = ext === "mp3" || ext === "m4a" || mime === "audio/mpeg" || mime === "audio/mp4" || mime === "audio/aac" || mime === "audio/x-m4a";
+    if (!allowed) {
+      setUploadError("Unsupported audio format. Please upload MP3 or M4A for the widest browser support (iOS Safari cannot play OGG/OPUS).");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
     setUploadError(null);
     setUploading(true);
     try {
@@ -632,13 +641,13 @@ function AdminPodcasts() {
               <label className="text-sm text-muted-foreground" htmlFor="p_audio">Audio URL</label>
               <div className="flex items-center gap-2">
                 <Input id="p_audio" value={audioUrl} onChange={(e) => setAudioUrl(e.target.value)} required placeholder="https://... .mp3" />
-                <input ref={fileInputRef} type="file" accept="audio/*" className="hidden" onChange={handleAudioFileChange} />
+                <input ref={fileInputRef} type="file" accept="audio/mpeg,audio/mp4,.mp3,.m4a" className="hidden" onChange={handleAudioFileChange} />
                 <Button type="button" variant="outline" className="gap-2 shrink-0" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
                   {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
                   {uploading ? "Uploading..." : "Upload"}
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground">You can paste a URL or upload an audio file (uploads to Supabase Storage).</p>
+              <p className="text-xs text-muted-foreground">You can paste a URL or upload an audio file. Recommended formats: MP3 or M4A for the widest browser support. OGG/OPUS may not play on iOS Safari.</p>
             </div>
             <div className="space-y-2">
               <label className="text-sm text-muted-foreground" htmlFor="p_duration">Duration (seconds)</label>

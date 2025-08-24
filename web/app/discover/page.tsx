@@ -205,10 +205,9 @@ export default function DiscoverPage() {
             <div className="aspect-video w-full overflow-hidden rounded-lg border border-border bg-background">
               <iframe
                 className="w-full h-full"
-                src={`https://www.youtube-nocookie.com/embed/${YT_VIDEO_ID}`}
+                src={`https://www.youtube.com/embed/${YT_VIDEO_ID}`}
                 title="KGIC YouTube"
                 loading="lazy"
-                referrerPolicy="strict-origin-when-cross-origin"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
               />

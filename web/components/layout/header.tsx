@@ -68,6 +68,9 @@ export function Header({ className = "" }: HeaderProps) {
             <Link href="/" className={isActive("/") ? "text-accent" : "hover:text-accent"}>
               Home
             </Link>
+            <Link href="/live" className={isActive("/live") ? "text-accent" : "hover:text-accent"}>
+              Live
+            </Link>
             <Link href="/discover" className={isActive("/discover") ? "text-accent" : "hover:text-accent"}>
               Discover
             </Link>
@@ -96,6 +99,9 @@ export function Header({ className = "" }: HeaderProps) {
           <nav className="flex items-center gap-6 text-sm">
             <Link href="/events" className={isActive("/events") ? "text-accent" : "hover:text-accent"}>
               Events
+            </Link>
+            <Link href="/ministries" className={isActive("/ministries") ? "text-accent" : "hover:text-accent"}>
+              Ministries
             </Link>
             <Link href="/about" className={isActive("/about") ? "text-accent" : "hover:text-accent"}>
               About
@@ -168,10 +174,12 @@ export function Header({ className = "" }: HeaderProps) {
             </div>
             <nav className="pt-6 pb-10 flex flex-col items-center gap-5 text-lg">
               <Link href="/" onClick={() => setMenuOpen(false)} className={isActive("/") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Home</Link>
+              <Link href="/live" onClick={() => setMenuOpen(false)} className={isActive("/live") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Live</Link>
               <Link href="/discover" onClick={() => setMenuOpen(false)} className={isActive("/discover") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Discover</Link>
               <Link href="/prayers" onClick={() => setMenuOpen(false)} className={isActive("/prayers") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Morning Prayer</Link>
               <Link href="/podcasts" onClick={() => setMenuOpen(false)} className={isActive("/podcasts") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Podcasts</Link>
               <Link href="/events" onClick={() => setMenuOpen(false)} className={isActive("/events") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Events</Link>
+              <Link href="/ministries" onClick={() => setMenuOpen(false)} className={isActive("/ministries") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Ministries</Link>
               <Link href="/about" onClick={() => setMenuOpen(false)} className={isActive("/about") ? "text-accent" : "text-foreground/90 hover:text-accent"}>About</Link>
               <Link href="/contact" onClick={() => setMenuOpen(false)} className={isActive("/contact") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Contact</Link>
               <button
