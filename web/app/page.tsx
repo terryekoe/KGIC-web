@@ -537,38 +537,22 @@ export default function Home() {
         </section>
 
         {/* Themes Section moved here */}
--        <section className="py-10 sm:py-14 bg-background">
--          <div className="mx-auto max-w-6xl px-4 sm:px-6">
--            <div className="rounded-xl border border-accent/30 bg-card p-5 sm:p-6">
--              <div className="grid md:grid-cols-2 gap-6">
--                <div>
--                  <p className="text-[10px] sm:text-xs font-semibold text-accent uppercase tracking-wide">Theme of the Year</p>
--                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mt-1">GREATER THINGS</h2>
--                </div>
--                <div>
--                  <p className="text-[10px] sm:text-xs font-semibold text-accent uppercase tracking-wide">Theme of the Month</p>
--                  <p className="text-sm sm:text-base md:text-lg text-foreground/90 mt-1">AUGUST 2025: BECAUSE I KNOW WHO I AM, I AM BUILT TO OVERCOME AND WIN</p>
--                </div>
--              </div>
--            </div>
--          </div>
--        </section>
-+        <section className="py-12 sm:py-16 bg-background">
-+          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-+            <div className="rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/10 via-background to-accent/5 p-8 sm:p-10 min-h-[50svh] flex items-center">
-+              <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
-+                <div>
-+                  <p className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wide">Theme of the Year</p>
-+                  <h2 className="text-3xl sm:text-5xl md:text-6xl font-extrabold leading-tight text-foreground mt-2">GREATER THINGS</h2>
-+                </div>
-+                <div>
-+                  <p className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wide">Theme of the Month</p>
-+                  <p className="text-base sm:text-xl md:text-2xl text-foreground/90 mt-2">AUGUST 2025: BECAUSE I KNOW WHO I AM, I AM BUILT TO OVERCOME AND WIN</p>
-+                </div>
-+              </div>
-+            </div>
-+          </div>
-+        </section>
+        <section className="py-12 sm:py-16 bg-background">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+            <div className="rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/10 via-background to-accent/5 p-8 sm:p-10 min-h-[50svh] flex items-center">
+              <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
+                <div>
+                  <p className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wide">Theme of the Year</p>
+                  <h2 className="text-3xl sm:text-5xl md:text-6xl font-extrabold leading-tight text-foreground mt-2">GREATER THINGS</h2>
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wide">Theme of the Month</p>
+                  <p className="text-base sm:text-xl md:text-2xl text-foreground/90 mt-2">AUGUST 2025: BECAUSE I KNOW WHO I AM, I AM BUILT TO OVERCOME AND WIN</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
       <Footer />
