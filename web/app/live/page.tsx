@@ -16,6 +16,16 @@ export default function LivePage() {
           </Link>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2">Live</h1>
           <p className="text-muted-foreground text-lg">Join our live services and events. When we are live, the stream will appear below.</p>
+          <div className="mt-4 grid gap-2 text-sm">
+            <div className="inline-flex flex-wrap items-center gap-2">
+              <span className="px-2 py-1 rounded-full bg-accent/10 text-accent font-semibold">Theme of the Year</span>
+              <span className="text-foreground/90">GREATER THINGS</span>
+            </div>
+            <div className="inline-flex flex-wrap items-center gap-2">
+              <span className="px-2 py-1 rounded-full bg-accent/10 text-accent font-semibold">Theme of the Month</span>
+              <span className="text-foreground/90">AUGUST 2025: BECAUSE I KNOW WHO I AM, I AM BUILT TO OVERCOME AND WIN</span>
+            </div>
+          </div>
         </div>
 
         <section className="rounded-xl border border-border bg-card p-4 sm:p-6">
