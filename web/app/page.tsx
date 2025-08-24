@@ -180,6 +180,32 @@ function RecentPodcast() {
     }
   }, [episode?.audioUrl]);
 
+  // NEW: Sync UI with audio element events so the Play/Pause state and progress update correctly
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateTime = () => setCurrentTime(audio.currentTime);
+    const updateDuration = () => setTotalDuration(audio.duration || 0);
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
+    const onEnded = () => setIsPlaying(false);
+
+    audio.addEventListener("timeupdate", updateTime);
+    audio.addEventListener("loadedmetadata", updateDuration);
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
+    audio.addEventListener("ended", onEnded);
+
+    return () => {
+      audio.removeEventListener("timeupdate", updateTime);
+      audio.removeEventListener("loadedmetadata", updateDuration);
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
+      audio.removeEventListener("ended", onEnded);
+    };
+  }, [episode?.audioUrl]);
+
   const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio || !episode?.audioUrl) return;
@@ -304,7 +330,14 @@ function RecentPodcast() {
 
       {/* Hidden audio element */}
       {hasEpisode ? (
-        <audio ref={audioRef} src={episode!.audioUrl} preload="metadata" aria-hidden="true" onError={() => setPlayError("Playback failed. Please use the Download button or try another browser.")} />
+        <audio
+          ref={audioRef}
+          src={episode!.audioUrl}
+          preload="metadata"
+          aria-hidden="true"
+          onLoadedMetadata={(e) => setTotalDuration((e.currentTarget as HTMLAudioElement).duration || 0)}
+          onError={() => setPlayError("Playback failed. Please use the Download button or try another browser.")}
+        />
       ) : null}
     </div>
   );
@@ -430,6 +463,13 @@ export default function Home() {
                 <p className="text-foreground/90 text-base sm:text-lg md:text-2xl max-w-prose drop-shadow-md">
                   We are a Christ-centered church raising responsible kingdom labourers.
                 </p>
+                {/* NEW: Themes on Home */}
+                <div className="rounded-lg border border-accent/30 bg-background/60 backdrop-blur-sm p-3 sm:p-4">
+                  <p className="text-[10px] sm:text-xs font-semibold text-accent uppercase tracking-wide">Theme of the Year</p>
+                  <p className="text-lg sm:text-2xl md:text-3xl font-bold text-foreground">GREATER THINGS</p>
+                  <p className="mt-3 text-[10px] sm:text-xs font-semibold text-accent uppercase tracking-wide">Theme of the Month</p>
+                  <p className="text-sm sm:text-base text-foreground/90">AUGUST 2025: BECAUSE I KNOW WHO I AM, I AM BUILT TO OVERCOME AND WIN</p>
+                </div>
                 <div className="flex flex-wrap gap-3 sm:gap-4">
                   <Link href="/prayers" className="inline-flex items-center rounded-full bg-accent text-accent-foreground font-semibold px-6 py-3 sm:px-7 sm:py-3.5 md:px-8 md:py-4 hover:bg-accent/90 transition-colors shadow-lg text-sm sm:text-base">
                     Today's Prayer
