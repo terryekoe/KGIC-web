@@ -463,13 +463,6 @@ export default function Home() {
                 <p className="text-foreground/90 text-base sm:text-lg md:text-2xl max-w-prose drop-shadow-md">
                   We are a Christ-centered church raising responsible kingdom labourers.
                 </p>
-                {/* NEW: Themes on Home */}
-                <div className="rounded-lg border border-accent/30 bg-background/60 backdrop-blur-sm p-3 sm:p-4">
-                  <p className="text-[10px] sm:text-xs font-semibold text-accent uppercase tracking-wide">Theme of the Year</p>
-                  <p className="text-lg sm:text-2xl md:text-3xl font-bold text-foreground">GREATER THINGS</p>
-                  <p className="mt-3 text-[10px] sm:text-xs font-semibold text-accent uppercase tracking-wide">Theme of the Month</p>
-                  <p className="text-sm sm:text-base text-foreground/90">AUGUST 2025: BECAUSE I KNOW WHO I AM, I AM BUILT TO OVERCOME AND WIN</p>
-                </div>
                 <div className="flex flex-wrap gap-3 sm:gap-4">
                   <Link href="/prayers" className="inline-flex items-center rounded-full bg-accent text-accent-foreground font-semibold px-6 py-3 sm:px-7 sm:py-3.5 md:px-8 md:py-4 hover:bg-accent/90 transition-colors shadow-lg text-sm sm:text-base">
                     Today's Prayer
@@ -538,6 +531,24 @@ export default function Home() {
               <div>
                 <h3 className="font-semibold mb-3 text-secondary-accent">Recently Posted Morning Prayer</h3>
                 <RecentPrayer />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Themes Section moved here */}
+        <section className="py-10 sm:py-14 bg-background">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+            <div className="rounded-xl border border-accent/30 bg-card p-5 sm:p-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <p className="text-[10px] sm:text-xs font-semibold text-accent uppercase tracking-wide">Theme of the Year</p>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mt-1">GREATER THINGS</h2>
+                </div>
+                <div>
+                  <p className="text-[10px] sm:text-xs font-semibold text-accent uppercase tracking-wide">Theme of the Month</p>
+                  <p className="text-sm sm:text-base md:text-lg text-foreground/90 mt-1">AUGUST 2025: BECAUSE I KNOW WHO I AM, I AM BUILT TO OVERCOME AND WIN</p>
+                </div>
               </div>
             </div>
           </div>
