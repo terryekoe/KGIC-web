@@ -37,11 +37,71 @@ export function Header({ className = "" }: HeaderProps) {
 
   const isActive = (path: string) => pathname === path;
 
+  const socials: { name: "facebook" | "instagram" | "youtube" | "x"; href: string; label: string }[] = [
+    { name: "facebook", href: "https://facebook.com/", label: "Facebook" },
+    { name: "instagram", href: "https://instagram.com/", label: "Instagram" },
+    { name: "youtube", href: "https://youtube.com/", label: "YouTube" },
+    { name: "x", href: "https://x.com/", label: "X (Twitter)" },
+  ];
+
+  const SocialIcon = ({ name }: { name: "facebook" | "instagram" | "youtube" | "x" }) => {
+    switch (name) {
+      case "youtube":
+        return (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <rect x="2.5" y="5" width="19" height="14" rx="3" ry="3"/>
+            <polygon points="10,9 16,12 10,15" fill="currentColor"/>
+          </svg>
+        );
+      case "instagram":
+        return (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <rect x="3" y="3" width="18" height="18" rx="5"/>
+            <circle cx="12" cy="12" r="3.5"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+          </svg>
+        );
+      case "facebook":
+        return (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M13 8h2.5M13 8v3h2.2M13 11H11v7"/>
+          </svg>
+        );
+      case "x":
+        return (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M4 4l16 16M20 4L4 20"/>
+          </svg>
+        );
+    }
+  };
+
   return (
-    <header className={`w-full sticky top-0 z-50 transition-colors ${
-      scrolled ? 'border-b border-border bg-background/70 backdrop-blur' : 'bg-transparent border-b-0'
-    } ${className}`}>
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-2 sm:py-3 grid grid-cols-[auto_1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-4">
+    <>
+      {/* Top Social Bar */}
+      <div className="w-full bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border text-foreground/80">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-1.5 flex items-center justify-end gap-2">
+          {socials.map((s) => (
+            <a
+              key={s.name}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={s.label}
+              title={s.label}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-foreground/5 hover:bg-foreground/10 hover:text-accent transition-colors"
+            >
+              <SocialIcon name={s.name} />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <header className={`w-full sticky top-0 z-50 transition-colors ${
+        scrolled ? 'border-b border-border bg-background/70 backdrop-blur' : 'bg-transparent border-b-0'
+      } ${className}`}>
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-2 sm:py-3 grid grid-cols-[auto_1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-4">
         {/* Mobile: Hamburger */}
         <div className="md:hidden">
           <button
@@ -202,5 +262,6 @@ export function Header({ className = "" }: HeaderProps) {
         document.body
       )}
     </header>
+    </>
   );
 }
