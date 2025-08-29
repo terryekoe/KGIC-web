@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PrayerCard } from "@/components/ui/prayer-card";
 import { getSupabaseClient } from "@/lib/supabaseClient";
+import { useI18n } from "@/components/ui/i18n-provider";
 
 interface DbPrayer {
   id: string;
@@ -21,6 +22,7 @@ interface DbPrayer {
 }
 
 export default function PrayerDetailPage() {
+  const { t } = useI18n();
   const params = useParams();
   const id = String(params?.id || "");
 
@@ -75,12 +77,12 @@ export default function PrayerDetailPage() {
       <main className="mx-auto max-w-4xl px-6 py-8">
         <div className="mb-8">
           <Link href="/prayers" className="text-sm text-muted-foreground hover:text-foreground">
-            ← Back to prayers
+            {t("prayersPage.backToPrayers")}
           </Link>
         </div>
 
         {loading ? (
-          <div className="rounded-xl border border-border bg-card p-8 text-muted-foreground">Loading…</div>
+          <div className="rounded-xl border border-border bg-card p-8 text-muted-foreground">{t("prayersPage.loading")}</div>
         ) : error ? (
           <div className="rounded-xl border border-border bg-card p-8 text-destructive">{error}</div>
         ) : prayer ? (
@@ -93,7 +95,7 @@ export default function PrayerDetailPage() {
             variant="full"
           />
         ) : (
-          <div className="rounded-xl border border-border bg-card p-8 text-muted-foreground">Prayer not found.</div>
+          <div className="rounded-xl border border-border bg-card p-8 text-muted-foreground">{t("prayersPage.prayerNotFound")}</div>
         )}
       </main>
       <Footer />

@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabaseClient";
+import { useI18n } from "@/components/ui/i18n-provider";
 
 interface DbPrayer {
   id: string;
@@ -21,6 +22,7 @@ interface DbPrayer {
 }
 
 export default function PrayersPage() {
+  const { t } = useI18n();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [todays, setTodays] = useState<DbPrayer | null>(null);
@@ -107,11 +109,11 @@ export default function PrayersPage() {
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Home
+            {t("common.backToHome")}
           </Link>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Morning Prayer</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">{t("prayersPage.title")}</h1>
           <p className="text-muted-foreground text-lg">
-            Start your day with prayer and reflection
+            {t("prayersPage.subtitle")}
           </p>
         </div>
 
@@ -119,7 +121,7 @@ export default function PrayersPage() {
         <section className="mb-12">
           {loading ? (
             <div className="rounded-xl border border-border bg-card p-8 text-muted-foreground">
-              Loading…
+              {t("prayersPage.loading")}
             </div>
           ) : todays ? (
             <PrayerCard
@@ -132,14 +134,14 @@ export default function PrayersPage() {
             />
           ) : (
             <div className="rounded-xl border border-border bg-card p-8 text-muted-foreground">
-              {error ? `Could not load today\'s prayer: ${error}` : "No published prayer yet."}
+              {error ? `${t("prayersPage.errorToday")}: ${error}` : t("prayersPage.noTodaysPrayer")}
             </div>
           )}
         </section>
 
         {/* Recent Prayers */}
         <section>
-          <h3 className="text-xl font-bold mb-6">Recent Prayers</h3>
+          <h3 className="text-xl font-bold mb-6">{t("prayersPage.recentSection")}</h3>
           <div className="space-y-4">
             {recent.map((prayer) => (
               <PrayerCard
@@ -152,7 +154,7 @@ export default function PrayersPage() {
               />
             ))}
             {!loading && recent.length === 0 && (
-              <div className="text-sm text-muted-foreground">No other prayers found.</div>
+              <div className="text-sm text-muted-foreground">{t("prayersPage.noRecentPrayers")}</div>
             )}
           </div>
         </section>

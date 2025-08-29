@@ -219,6 +219,25 @@ function AdminPrayers() {
     setLoading(false);
   };
 
+  const publishNow = async (id: string) => {
+    if (!supabase) return;
+    setError(null);
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from("prayers")
+        .update({ status: "published" })
+        .eq("id", id);
+      if (error) throw error;
+      setSuccess("Prayer published.");
+      await fetchPrayers();
+    } catch (err: any) {
+      setError(err.message || "Failed to publish prayer.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   React.useEffect(() => {
     fetchPrayers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -401,6 +420,11 @@ function AdminPrayers() {
                     {p.excerpt && <p className="text-sm text-muted-foreground mt-1">{p.excerpt}</p>}
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
+                    {p.status !== "published" && (
+                      <Button variant="default" size="sm" className="gap-2" onClick={() => publishNow(p.id)}>
+                        <Megaphone className="h-4 w-4" /> Publish
+                      </Button>
+                    )}
                     <Button variant="outline" size="sm" className="gap-2" onClick={() => handleEdit(p)}>
                       <Pencil className="h-4 w-4" /> Edit
                     </Button>
@@ -433,7 +457,7 @@ function AdminPodcasts() {
   const [artist, setArtist] = React.useState("");
   const [audioUrl, setAudioUrl] = React.useState("");
   const [duration, setDuration] = React.useState<string>("");
-  const [status, setStatus] = React.useState<string>("draft");
+  const [status, setStatus] = React.useState<string>("published");
   const [publishedAt, setPublishedAt] = React.useState<string>("");
   const [description, setDescription] = React.useState("");
   
@@ -460,7 +484,7 @@ function AdminPodcasts() {
     setArtist("");
     setAudioUrl("");
     setDuration("");
-    setStatus("draft");
+    setStatus("published");
     setPublishedAt("");
     setDescription("");
   };
@@ -500,6 +524,13 @@ function AdminPodcasts() {
     setError(null);
     setSuccess(null);
 
+    // Determine published_at ISO based on status and input
+    const nowISO = new Date().toISOString();
+    let publishedISO: string | null = publishedAt ? new Date(publishedAt).toISOString() : null;
+    if (status === "published" && !publishedISO) {
+      publishedISO = nowISO;
+    }
+
     const payload: Partial<Podcast> = {
       title,
       description: description || null,
@@ -507,7 +538,7 @@ function AdminPodcasts() {
       audio_url: audioUrl,
       duration_seconds: toIntOrNull(duration),
       status,
-      published_at: publishedAt ? new Date(publishedAt).toISOString() : null,
+      published_at: publishedISO,
     } as any;
 
     try {
@@ -553,6 +584,26 @@ function AdminPodcasts() {
       await fetchPodcasts();
     } catch (err: any) {
       setError(err.message || "Failed to delete podcast.");
+    }
+  };
+
+  const publishNow = async (id: string) => {
+    if (!supabase) return;
+    setError(null);
+    setSaving(true);
+    try {
+      const nowISO = new Date().toISOString();
+      const { error } = await supabase
+        .from("podcasts")
+        .update({ status: "published", published_at: nowISO })
+        .eq("id", id);
+      if (error) throw error;
+      setSuccess("Podcast published.");
+      await fetchPodcasts();
+    } catch (err: any) {
+      setError(err.message || "Failed to publish podcast.");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -717,6 +768,11 @@ function AdminPodcasts() {
                     <p className="text-xs text-muted-foreground mt-1">{p.artist || 'KGIC'} • {p.duration_seconds ? `${Math.floor(p.duration_seconds/60)}:${String(p.duration_seconds%60).padStart(2,'0')}` : '—:—'}</p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
+                    {p.status !== "published" && (
+                      <Button variant="default" size="sm" className="gap-2" onClick={() => publishNow(p.id)}>
+                        <Megaphone className="h-4 w-4" /> Publish
+                      </Button>
+                    )}
                     <Button variant="outline" size="sm" className="gap-2" onClick={() => handleEdit(p)}>
                       <Pencil className="h-4 w-4" /> Edit
                     </Button>

@@ -1,0 +1,327 @@
+{
+  "nav": {
+    "home": "Home",
+    "live": "Live",
+    "discover": "Discover",
+    "prayers": "Morning Prayer",
+    "podcasts": "Podcasts",
+    "events": "Events",
+    "ministries": "Ministries",
+    "bookStore": "Book Store",
+    "about": "About",
+    "contact": "Contact",
+    "give": "Give"
+  },
+  "countdown": {
+    "nextService": "Next Service",
+    "days": "DAYS",
+    "hours": "HOURS",
+    "minutes": "MINS",
+    "seconds": "SECS"
+  },
+  "services": {
+    "sundayImpact": "Sunday Impact Service",
+    "thursdayCommunion": "Thursday Communion Service"
+  },
+  "common": {
+    "backToHome": "Back to Home",
+    "viewAll": "View all",
+    "contact": "Contact",
+    "days": {
+      "sunday": "Sundays",
+      "monday": "Mondays", 
+      "tuesday": "Tuesdays",
+      "wednesday": "Wednesdays",
+      "thursday": "Thursdays",
+      "friday": "Fridays",
+      "saturday": "Saturdays"
+    }
+  },
+  "give": {
+    "title": "Give",
+    "intro": "Partner with us to advance the Gospel and serve our community.",
+    "ways": "Ways to Give",
+    "momo": "Mobile Money (MOMO)",
+    "bankTransfer": "Bank Transfer",
+    "bankTransferDetail": "Request bank details at",
+    "inPerson": "In-Person",
+    "inPersonDetail": "During any of our services",
+    "onlineButton": "Give Online",
+    "onlineTitle": "Online Giving",
+    "onlineDesc": "Integrate your preferred payment provider here (Flutterwave, Paystack, Stripe, etc.)."
+  },
+  "discover": {
+    "title": "Discover",
+    "subtitle": "Your weekly feed: announcements, serving, small groups, teaching, and devotions",
+    "announcements": "Announcements",
+    "loading": "Loading announcements…",
+    "learnMore": "Learn more",
+    "noAnnouncements": "No announcements right now. Check back soon.",
+    "ministriesHeading": "Ministries & Serving",
+    "loadingMinistries": "Loading ministries…",
+    "noMinistries": "No ministries to show.",
+    "serveCta": "I want to serve →",
+    "groupsHeading": "Small Groups",
+    "loadingGroups": "Loading groups…",
+    "noGroups": "No groups to show.",
+    "findGroupCta": "Find a group →"
+  },
+  "youtube": {
+    "latest": "Latest from YouTube",
+    "connect": "Connect your channel by setting NEXT_PUBLIC_YOUTUBE_VIDEO_ID or visit our channel:",
+    "openChannel": "Open YouTube Channel"
+  },
+  "prayers": {
+    "loadingLatest": "Loading latest prayer…",
+    "none": "No recent prayer. Check back soon."
+  },
+  "prayer": {
+    "recentlyPosted": "Recently posted",
+    "loading": "Loading…",
+    "pleaseWait": "Please wait…",
+    "noRecent": "No recent prayer",
+    "checkBackSoon": "Check back soon.",
+    "readNow": "Read now"
+  },
+  "podcasts": {
+    "latest": "Latest Podcast",
+    "loadingLatest": "Loading latest episode…",
+    "none": "No recent episode. Check back soon.",
+    "listen": "Listen",
+    "play": "Play",
+    "pause": "Pause",
+    "download": "Download",
+    "artistDefault": "KGIC",
+    "errors": {
+      "playbackFailed": "Playback failed",
+      "unsupported": "Audio format not supported on this device"
+    }
+  },
+  "home": {
+    "hero": {
+      "findJesus": "Find Jesus",
+      "findHope": "Find Hope",
+      "findPurpose": "Find Purpose",
+      "tagline": "A place to encounter God's presence, grow in faith, and serve our world.",
+      "todaysPrayer": "Today's Prayer",
+      "explorePodcasts": "Explore Podcasts"
+    },
+    "highlights": {
+      "morningPrayerTitle": "Morning Prayer",
+      "morningPrayerDesc": "Daily devotions to start your day in God's presence.",
+      "morningPrayerLink": "Go to prayers",
+      "podcastsTitle": "Podcasts",
+      "podcastsDesc": "Teachings and messages to build your faith.",
+      "podcastsLink": "Explore podcasts",
+      "eventsTitle": "Events",
+      "eventsDesc": "Join what's happening across KGIC.",
+      "eventsLink": "See events"
+    },
+    "latest": {
+      "sectionTitle": "What's new",
+      "sectionSubtitle": "Fresh messages and devotions",
+      "recentlyUploadedPodcast": "Recently uploaded podcast",
+      "recentlyPostedPrayer": "Recently posted prayer"
+    },
+    "theme": {
+      "yearLabel": "Theme of the year",
+      "yearTitle": "GREATER THINGS",
+      "monthLabel": "Theme of the month",
+      "monthTitle": "AUGUST 2025: BECAUSE I KNOW WHO I AM, I AM BUILT TO OVERCOME AND WIN"
+    }
+  },
+  "aboutPage": {
+    "title": "About KGIC",
+    "description": "The King's Generals International Church is a Christ-centered church committed to birthing God's army of visionaries for worldwide reformation.",
+    "visionTitle": "Our Vision",
+    "visionText": "To birth God's army of Visionaries for a worldwide Christ centered reformation.",
+    "missionTitle": "Our Mission",
+    "mission1": "Passionate teaching and training.",
+    "mission2": "Practical demonstration of the kingdom gospel worldwide by the manifestation of the power and fruit of the Holy Ghost.",
+    "mission3": "Strategic fellowship.",
+    "leadershipTitle": "Leadership",
+    "leadPastorLabel": "Lead Pastor",
+    "leadPastorName": "Apostle Eric Abrahams-Appiah",
+    "locationTitle": "Location",
+    "locationVenue": "Restoration Center",
+    "locationAddress": "Madina Estate, Accra, Ghana"
+  },
+  "contactPage": {
+    "title": "Contact Us",
+    "subtitle": "We'd love to hear from you",
+    "email": "Email",
+    "phone": "Phone",
+    "form": {
+      "fullName": "Full name",
+      "email": "Email",
+      "message": "Message",
+      "send": "Send Message"
+    }
+  },
+  "eventsPage": {
+    "title": "Upcoming Events",
+    "subtitle": "Join us and be part of the community",
+    "sample": {
+      "1": { "title": "Sunday Worship Service", "date": "Sun, Sep 15 • 9:00 AM", "location": "KGIC Main Hall" },
+      "2": { "title": "Youth Bible Study", "date": "Wed, Sep 18 • 6:30 PM", "location": "Room 204" },
+      "3": { "title": "Community Outreach", "date": "Sat, Sep 21 • 10:00 AM", "location": "City Center" }
+    }
+  },
+  "podcastsPage": {
+    "title": "Podcasts",
+    "subtitle": "Stream messages and download to listen offline",
+    "loading": "Loading podcasts…",
+    "noEpisodes": "No published podcasts yet.",
+    "backToHome": "Back to Home",
+    "searchAriaLabel": "Search podcasts",
+    "searchPlaceholder": "Search by title or speaker…",
+    "filters": {
+      "title": "Filters",
+      "popular": "Popular categories",
+      "date": "Date range",
+      "from": "From",
+      "to": "To",
+      "duration": "Duration",
+      "durationAll": "All lengths",
+      "short": "Under 15 min",
+      "medium": "15–40 min",
+      "long": "Over 40 min",
+      "clear": "Clear filters",
+      "noResults": "No results match your filters.",
+      "categories": {
+        "title": "Categories",
+        "dropdownLabel": "Categories (dropdown)",
+        "dropdownPlaceholder": "Select categories",
+        "showMore": "Show more",
+        "showLess": "Show less",
+        "items": {
+          "anointing": "Anointing",
+          "grace": "Grace",
+          "healing": "Healing",
+          "favour": "Favour",
+          "thanksgiving": "Thanksgiving",
+          "deliverance": "Deliverance",
+          "faith": "Faith",
+          "salvation": "Salvation",
+          "prayer": "Prayer",
+          "worship": "Worship",
+          "love": "Love",
+          "hope": "Hope",
+          "joy": "Joy",
+          "prosperity": "Prosperity",
+          "purpose": "Purpose",
+          "holySpirit": "Holy Spirit",
+          "wisdom": "Wisdom",
+          "transformation": "Transformation",
+          "breakthrough": "Breakthrough",
+          "revival": "Revival"
+        }
+      }
+    }
+  },
+  "prayersPage": {
+    "title": "Morning Prayer",
+    "subtitle": "Start your day with prayer and reflection",
+    "backToHome": "Back to Home",
+    "todaysSection": "Today's Prayer",
+    "recentSection": "Recent Prayers",
+    "loading": "Loading…",
+    "noTodaysPrayer": "No published prayer yet.",
+    "noRecentPrayers": "No other prayers found.",
+    "errorToday": "Could not load today's prayer",
+    "backToPrayers": "← Back to prayers",
+    "prayerNotFound": "Prayer not found."
+  },
+  "bookStorePage": {
+    "title": "Book Store",
+    "subtitle": "Discover spiritual resources and books to strengthen your faith",
+    "catalogComing": "Catalog Coming Soon",
+    "description": "We're preparing a curated collection of books, devotionals, and resources to help you grow in your spiritual journey.",
+    "updates": {
+      "title": "Get Updates",
+      "description": "Be the first to know when our book store launches"
+    }
+  },
+  "ministriesPage": {
+    "title": "Ministries",
+    "subtitle": "Discover ways to serve and grow in your faith",
+    "backToHome": "Back to Home",
+    "getInvolved": "How to Get Involved",
+    "involvement": {
+      "title": "Ready to Serve?",
+      "description": "Join us in making a difference in our community and beyond",
+      "contact": "Contact our ministry coordinator at",
+      "or": "or",
+      "visitSunday": "visit us on Sunday morning"
+    },
+    "ministries": {
+      "worship": {
+        "name": "Worship Ministry",
+        "description": "Lead our congregation in praise and worship through music and song"
+      },
+      "youth": {
+        "name": "Youth Ministry",
+        "description": "Mentor and guide the next generation in their faith journey"
+      },
+      "children": {
+        "name": "Children's Ministry",
+        "description": "Teach and care for our youngest members during services and events"
+      },
+      "outreach": {
+        "name": "Community Outreach",
+        "description": "Serve our local community through various service projects and initiatives"
+      },
+      "hospitality": {
+        "name": "Hospitality Ministry",
+        "description": "Welcome visitors and create a warm, inviting atmosphere for all"
+      },
+      "prayer": {
+        "name": "Prayer Ministry",
+        "description": "Intercede for our church, community, and world through dedicated prayer"
+      }
+    },
+    "smallGroups": {
+      "title": "Strategic Cell Fellowships",
+      "description": "Join a small group for deeper fellowship, Bible study, and mutual support",
+      "benefits": {
+        "title": "Benefits of Joining",
+        "community": "Build meaningful relationships",
+        "growth": "Grow deeper in your faith",
+        "support": "Receive prayer and encouragement",
+        "serve": "Discover your gifts and calling"
+      },
+      "contact": "Contact us to learn about current groups and meeting times",
+      "table": {
+        "name": "Name of fellowship",
+        "days": "Days of Meeting",
+        "time": "Time of meeting",
+        "venue": "Venue"
+      },
+      "rows": {
+        "glory": { "name": "Glory", "day": "common.days.wednesday", "time": "7–8 pm", "venue": "Madina Estate, KGIC" },
+        "restoration": { "name": "Restoration", "day": "common.days.sunday", "time": "6–6:30 pm", "venue": "Dzorwulu, Sis. Daniella’s residence" },
+        "impactPlus": { "name": "Impact Plus", "day": "common.days.wednesday", "time": "7:30–8:30 pm", "venue": "Athletic Oval, UG" },
+        "victory": { "name": "Victory", "day": "common.days.sunday", "time": "6–7 pm", "venue": "Agbogba, Pst Barnabas Residence" }
+      }
+    }
+  },
+  "livePage": {
+    "title": "Live Services",
+    "subtitle": "Join us for live worship and teaching",
+    "backToHome": "Back to Home",
+    "currentlyLive": "Currently Live",
+    "noLiveStream": "No live stream at the moment",
+    "streamPlaceholder": "Live stream will appear here during service times",
+    "joinUs": "Join Us Live",
+    "serviceInfo": {
+      "sunday": "Sunday Impact Service at 9:00 AM",
+      "thursday": "Thursday Communion Service at 6:30 PM"
+    },
+    "missedService": {
+      "title": "Missed a Service?",
+      "description": "Catch up on recent messages and teachings",
+      "podcastsLink": "Browse Podcasts",
+      "prayersLink": "Morning Prayers"
+    }
+  }
+}

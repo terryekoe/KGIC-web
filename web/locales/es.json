@@ -1,0 +1,327 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "live": "En vivo",
+    "discover": "Descubrir",
+    "prayers": "Oración de la mañana",
+    "podcasts": "Podcasts",
+    "events": "Eventos",
+    "ministries": "Ministerios",
+    "bookStore": "Librería",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "give": "Dar"
+  },
+  "countdown": {
+    "nextService": "Próximo servicio",
+    "days": "DÍAS",
+    "hours": "HORAS",
+    "minutes": "MINS",
+    "seconds": "SEGS"
+  },
+  "services": {
+    "sundayImpact": "Servicio de Impacto del domingo",
+    "thursdayCommunion": "Servicio de Comunión del jueves"
+  },
+  "common": {
+    "backToHome": "Volver al inicio",
+    "viewAll": "Ver todo",
+    "contact": "Contacto",
+    "days": {
+      "sunday": "Domingos",
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábados"
+    }
+  },
+  "give": {
+    "title": "Dar",
+    "intro": "Asóciate con nosotros para avanzar el Evangelio y servir a nuestra comunidad.",
+    "ways": "Formas de dar",
+    "momo": "Dinero móvil (MOMO)",
+    "bankTransfer": "Transferencia bancaria",
+    "bankTransferDetail": "Solicita los datos bancarios en",
+    "inPerson": "En persona",
+    "inPersonDetail": "Durante cualquiera de nuestros servicios",
+    "onlineButton": "Dar en línea",
+    "onlineTitle": "Donaciones en línea",
+    "onlineDesc": "Integra aquí tu proveedor de pagos preferido (Flutterwave, Paystack, Stripe, etc.)."
+  },
+  "discover": {
+    "title": "Descubrir",
+    "subtitle": "Tu feed semanal: anuncios, servicio, grupos pequeños, enseñanza y devocionales",
+    "announcements": "Anuncios",
+    "loading": "Cargando anuncios…",
+    "learnMore": "Saber más",
+    "noAnnouncements": "No hay anuncios por ahora. Vuelve pronto.",
+    "ministriesHeading": "Ministerios y Servicio",
+    "loadingMinistries": "Cargando ministerios…",
+    "noMinistries": "No hay ministerios para mostrar.",
+    "serveCta": "Quiero servir →",
+    "groupsHeading": "Grupos pequeños",
+    "loadingGroups": "Cargando grupos…",
+    "noGroups": "No hay grupos para mostrar.",
+    "findGroupCta": "Encontrar un grupo →"
+  },
+  "youtube": {
+    "latest": "Lo último de YouTube",
+    "connect": "Conecta tu canal configurando NEXT_PUBLIC_YOUTUBE_VIDEO_ID o visita nuestro canal:",
+    "openChannel": "Abrir canal de YouTube"
+  },
+  "prayers": {
+    "loadingLatest": "Cargando la última oración…",
+    "none": "No hay oraciones recientes. Vuelve pronto."
+  },
+  "prayer": {
+    "recentlyPosted": "Publicado recientemente",
+    "loading": "Cargando…",
+    "pleaseWait": "Por favor espera…",
+    "noRecent": "No hay oración reciente",
+    "checkBackSoon": "Vuelve pronto.",
+    "readNow": "Leer ahora"
+  },
+  "podcasts": {
+    "latest": "Último podcast",
+    "loadingLatest": "Cargando el último episodio…",
+    "none": "No hay episodios recientes. Vuelve pronto.",
+    "listen": "Escuchar",
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "download": "Descargar",
+    "artistDefault": "KGIC",
+    "errors": {
+      "playbackFailed": "Error de reproducción",
+      "unsupported": "Formato de audio no compatible en este dispositivo"
+    }
+  },
+  "home": {
+    "hero": {
+      "findJesus": "Encontrar a Jesús",
+      "findHope": "Encontrar esperanza",
+      "findPurpose": "Encontrar propósito",
+      "tagline": "Un lugar para encontrar la presencia de Dios, crecer en la fe y servir a nuestro mundo.",
+      "todaysPrayer": "Oración de hoy",
+      "explorePodcasts": "Explorar podcasts"
+    },
+    "highlights": {
+      "morningPrayerTitle": "Oración de la mañana",
+      "morningPrayerDesc": "Devocionales diarios para empezar tu día en la presencia de Dios.",
+      "morningPrayerLink": "Ir a oraciones",
+      "podcastsTitle": "Podcasts",
+      "podcastsDesc": "Enseñanzas y mensajes para fortalecer tu fe.",
+      "podcastsLink": "Explorar podcasts",
+      "eventsTitle": "Eventos",
+      "eventsDesc": "Únete a lo que está sucediendo en KGIC.",
+      "eventsLink": "Ver eventos"
+    },
+    "latest": {
+      "sectionTitle": "Qué hay de nuevo",
+      "sectionSubtitle": "Mensajes y devocionales recientes",
+      "recentlyUploadedPodcast": "Podcast subido recientemente",
+      "recentlyPostedPrayer": "Oración publicada recientemente"
+    },
+    "theme": {
+      "yearLabel": "Tema del año",
+      "yearTitle": "COSAS MAYORES",
+      "monthLabel": "Tema del mes",
+      "monthTitle": "AGOSTO 2025: PORQUE SÉ QUIÉN SOY, ESTOY HECHO PARA SUPERAR Y VENCER"
+    }
+  },
+  "aboutPage": {
+    "title": "Acerca de KGIC",
+    "description": "The King's Generals International Church es una iglesia centrada en Cristo comprometida con dar a luz al ejército de visionarios de Dios para una reforma mundial.",
+    "visionTitle": "Nuestra Visión",
+    "visionText": "Dar a luz al ejército de visionarios de Dios para una reforma mundial centrada en Cristo.",
+    "missionTitle": "Nuestra Misión",
+    "mission1": "Enseñanza y formación apasionadas.",
+    "mission2": "Demostración práctica del evangelio del reino en todo el mundo mediante la manifestación del poder y el fruto del Espíritu Santo.",
+    "mission3": "Compañerismo estratégico.",
+    "leadershipTitle": "Liderazgo",
+    "leadPastorLabel": "Pastor principal",
+    "leadPastorName": "Apóstol Eric Abrahams-Appiah",
+    "locationTitle": "Ubicación",
+    "locationVenue": "Centro de Restauración",
+    "locationAddress": "Madina Estate, Accra, Ghana"
+  },
+  "contactPage": {
+    "title": "Contáctanos",
+    "subtitle": "Nos encantaría saber de ti",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "form": {
+      "fullName": "Nombre completo",
+      "email": "Correo electrónico",
+      "message": "Mensaje",
+      "send": "Enviar"
+    }
+  },
+  "eventsPage": {
+    "title": "Próximos eventos",
+    "subtitle": "Únete y sé parte de la comunidad",
+    "sample": {
+      "1": { "title": "Servicio de adoración del domingo", "date": "Dom., 15 sep. • 9:00", "location": "Sala principal de KGIC" },
+      "2": { "title": "Estudio bíblico juvenil", "date": "Mié., 18 sep. • 18:30", "location": "Sala 204" },
+      "3": { "title": "Alcance comunitario", "date": "Sáb., 21 sep. • 10:00", "location": "Centro de la ciudad" }
+    }
+  },
+  "podcastsPage": {
+    "title": "Podcasts",
+    "subtitle": "Transmite mensajes y descárgalos para escuchar sin conexión",
+    "loading": "Cargando podcasts…",
+    "noEpisodes": "Aún no hay podcasts publicados.",
+    "backToHome": "Volver al inicio",
+    "searchAriaLabel": "Buscar podcasts",
+    "searchPlaceholder": "Buscar por título o predicador…",
+    "filters": {
+      "title": "Filtros",
+      "popular": "Categorías populares",
+      "date": "Rango de fechas",
+      "from": "Desde",
+      "to": "Hasta",
+      "duration": "Duración",
+      "durationAll": "Todas las duraciones",
+      "short": "Menos de 15 min",
+      "medium": "15–40 min",
+      "long": "Más de 40 min",
+      "clear": "Borrar filtros",
+      "noResults": "No hay resultados que coincidan con tus filtros.",
+      "categories": {
+        "title": "Categorías",
+        "dropdownLabel": "Categorías (lista desplegable)",
+        "dropdownPlaceholder": "Seleccionar categorías",
+        "showMore": "Mostrar más",
+        "showLess": "Mostrar menos",
+        "items": {
+          "anointing": "Unción",
+          "grace": "Gracia",
+          "healing": "Sanidad",
+          "favour": "Favor",
+          "thanksgiving": "Acción de gracias",
+          "deliverance": "Liberación",
+          "faith": "Fe",
+          "salvation": "Salvación",
+          "prayer": "Oración",
+          "worship": "Adoración",
+          "love": "Amor",
+          "hope": "Esperanza",
+          "joy": "Gozo",
+          "prosperity": "Prosperidad",
+          "purpose": "Propósito",
+          "holySpirit": "Espíritu Santo",
+          "wisdom": "Sabiduría",
+          "transformation": "Transformación",
+          "breakthrough": "Ruptura",
+          "revival": "Avivamiento"
+        }
+      }
+    }
+  },
+  "prayersPage": {
+    "title": "Oración matutina",
+    "subtitle": "Comienza tu día con oración y reflexión",
+    "backToHome": "Volver al inicio",
+    "todaysSection": "La oración de hoy",
+    "recentSection": "Oraciones recientes",
+    "loading": "Cargando…",
+    "noTodaysPrayer": "Aún no hay oraciones publicadas.",
+    "noRecentPrayers": "No se encontraron otras oraciones.",
+    "errorToday": "No se pudo cargar la oración de hoy",
+    "backToPrayers": "← Volver a las oraciones",
+    "prayerNotFound": "Oración no encontrada."
+  },
+  "bookStorePage": {
+    "title": "Librería",
+    "subtitle": "Descubre recursos espirituales y libros para fortalecer tu fe",
+    "catalogComing": "Catálogo próximamente",
+    "description": "Estamos preparando una colección de libros, devocionales y recursos para ayudarte a crecer en tu camino espiritual.",
+    "updates": {
+      "title": "Mantente informado",
+      "description": "Sé el primero en saber cuando lancemos nuestra librería"
+    }
+  },
+  "ministriesPage": {
+    "title": "Ministerios",
+    "subtitle": "Descubre formas de servir y crecer en tu fe",
+    "backToHome": "Volver al inicio",
+    "getInvolved": "Cómo involucrarse",
+    "involvement": {
+      "title": "¿Listo para servir?",
+      "description": "Únete a nosotros para hacer la diferencia en nuestra comunidad y más allá",
+      "contact": "Contacta a nuestro coordinador de ministerios en",
+      "or": "o",
+      "visitSunday": "visítanos el domingo por la mañana"
+    },
+    "ministries": {
+      "worship": {
+        "name": "Ministerio de adoración",
+        "description": "Liderar a la congregación en alabanza y adoración a través de música y canto"
+      },
+      "youth": {
+        "name": "Ministerio juvenil",
+        "description": "Nutrir y guiar a la nueva generación en su caminar de fe"
+      },
+      "children": {
+        "name": "Ministerio infantil",
+        "description": "Enseñar y cuidar a nuestros miembros más jóvenes durante servicios y eventos"
+      },
+      "outreach": {
+        "name": "Alcance comunitario",
+        "description": "Servir a nuestra comunidad a través de varios proyectos e iniciativas"
+      },
+      "hospitality": {
+        "name": "Ministerio de hospitalidad",
+        "description": "Dar la bienvenida a los visitantes y crear un ambiente cálido y acogedor para todos"
+      },
+      "prayer": {
+        "name": "Ministerio de oración",
+        "description": "Interceder por nuestra iglesia, comunidad y el mundo a través de la oración"
+      }
+    },
+    "smallGroups": {
+      "title": "Células estratégicas",
+      "description": "Únete a un grupo pequeño para una comunión más profunda, estudio bíblico y apoyo mutuo",
+      "benefits": {
+        "title": "Beneficios de unirse",
+        "community": "Construir relaciones significativas",
+        "growth": "Crecer en la fe",
+        "support": "Recibir oración y ánimo",
+        "serve": "Descubrir tus dones y llamado"
+      },
+      "contact": "Contáctanos para conocer los grupos actuales y sus horarios",
+      "table": {
+        "name": "Nombre de la célula",
+        "days": "Días de reunión",
+        "time": "Hora de reunión",
+        "venue": "Lugar"
+      },
+      "rows": {
+        "glory": { "name": "Glory", "day": "common.days.wednesday", "time": "7–8 pm", "venue": "Madina Estate, KGIC" },
+        "restoration": { "name": "Restauración", "day": "common.days.sunday", "time": "6–6:30 pm", "venue": "Dzorwulu, residencia de la Hna. Daniella" },
+        "impactPlus": { "name": "Impact Plus", "day": "common.days.wednesday", "time": "7:30–8:30 pm", "venue": "Athletic Oval, UG" },
+        "victory": { "name": "Victoria", "day": "common.days.sunday", "time": "6–7 pm", "venue": "Agbogba, residencia del Pst Barnabas" }
+      }
+    }
+  },
+  "livePage": {
+    "title": "Culto en vivo",
+    "subtitle": "Únete a nosotros para adoración y enseñanza en vivo",
+    "backToHome": "Volver al inicio",
+    "currentlyLive": "En vivo",
+    "noLiveStream": "No hay transmisión en vivo en este momento",
+    "streamPlaceholder": "La transmisión en vivo aparecerá aquí durante las horas de culto",
+    "joinUs": "Únete a nosotros en vivo",
+    "serviceInfo": {
+      "sunday": "Culto de Impacto dominical a las 9:00 AM",
+      "thursday": "Culto de Comunión jueves a las 6:30 PM"
+    },
+    "missedService": {
+      "title": "¿Te perdiste un culto?",
+      "description": "Ponte al día con mensajes y enseñanzas recientes",
+      "podcastsLink": "Explorar podcasts",
+      "prayersLink": "Oraciones matutinas"
+    }
+  }
+}

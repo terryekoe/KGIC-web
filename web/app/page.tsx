@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import { Play, Pause, Download, Share2, Link2 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 import { getSupabaseClient } from "@/lib/supabaseClient";
+import { useI18n } from "@/components/ui/i18n-provider";
 
 const heroImages = [
   "/hero/slide-1.jpeg",
@@ -21,6 +22,7 @@ const heroImages = [
 ];
 
 function NextServiceCountdown() {
+  const { t } = useI18n();
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [nextService, setNextService] = useState("");
 
@@ -34,14 +36,14 @@ function NextServiceCountdown() {
       if (today === 0 && currentTime < 510) {
         const target = new Date(now);
         target.setHours(8, 30, 0, 0);
-        return { target, name: "Sunday Impact Service" };
+        return { target, name: t("services.sundayImpact") };
       }
       
       // Thursday Communion Service: 6:00 PM (1080 minutes from midnight) 
       if (today === 4 && currentTime < 1080) {
         const target = new Date(now);
         target.setHours(18, 0, 0, 0);
-        return { target, name: "Thursday Communion Service" };
+        return { target, name: t("services.thursdayCommunion") };
       }
       
       // Next Sunday Impact Service
@@ -50,7 +52,7 @@ function NextServiceCountdown() {
       nextSunday.setDate(now.getDate() + daysUntilSunday);
       nextSunday.setHours(8, 30, 0, 0);
       
-      return { target: nextSunday, name: "Sunday Impact Service" };
+      return { target: nextSunday, name: t("services.sundayImpact") };
     }
 
     function updateCountdown() {
@@ -77,24 +79,24 @@ function NextServiceCountdown() {
   return (
     <div className="bg-background/60 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-accent/25">
       <div className="text-center">
-        <h3 className="text-accent font-semibold mb-1 text-xs sm:text-sm">Next Service</h3>
+        <h3 className="text-accent font-semibold mb-1 text-xs sm:text-sm">{t("countdown.nextService")}</h3>
         <p className="text-foreground/90 text-[11px] sm:text-xs mb-2">{nextService}</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 text-center">
           <div className="bg-foreground/10 rounded-lg p-2">
             <div className="text-lg sm:text-xl md:text-2xl font-bold text-accent">{timeLeft.days}</div>
-            <div className="text-[10px] sm:text-[11px] text-foreground/70">DAYS</div>
+            <div className="text-[10px] sm:text-[11px] text-foreground/70">{t("countdown.days")}</div>
           </div>
           <div className="bg-foreground/10 rounded-lg p-2">
             <div className="text-lg sm:text-xl md:text-2xl font-bold text-accent">{timeLeft.hours}</div>
-            <div className="text-[10px] sm:text-[11px] text-foreground/70">HOURS</div>
+            <div className="text-[10px] sm:text-[11px] text-foreground/70">{t("countdown.hours")}</div>
           </div>
           <div className="bg-foreground/10 rounded-lg p-2">
             <div className="text-lg sm:text-xl md:text-2xl font-bold text-accent">{timeLeft.minutes}</div>
-            <div className="text-[10px] sm:text-[11px] text-foreground/70">MINS</div>
+            <div className="text-[10px] sm:text-[11px] text-foreground/70">{t("countdown.minutes")}</div>
           </div>
           <div className="bg-foreground/10 rounded-lg p-2">
             <div className="text-lg sm:text-xl md:text-2xl font-bold text-accent">{timeLeft.seconds}</div>
-            <div className="text-[10px] sm:text-[11px] text-foreground/70">SECS</div>
+            <div className="text-[10px] sm:text-[11px] text-foreground/70">{t("countdown.seconds")}</div>
           </div>
         </div>
       </div>
@@ -103,6 +105,7 @@ function NextServiceCountdown() {
 }
 
 function RecentPodcast() {
+  const { t } = useI18n();
   const supabase = getSupabaseClient();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -172,7 +175,7 @@ function RecentPodcast() {
         supported = has('audio/ogg; codecs="opus"') || has("audio/ogg");
       }
       if (!supported) {
-        setPlayError("This audio format isn't supported by your browser. Please use the Download button.");
+        setPlayError(t("podcasts.errors.unsupported"));
       }
       setCanPlay(supported);
     } catch {
@@ -210,7 +213,7 @@ function RecentPodcast() {
     const audio = audioRef.current;
     if (!audio || !episode?.audioUrl) return;
     if (!canPlay) {
-      setPlayError("This audio format isn't supported by your browser. Please use the Download button.");
+      setPlayError(t("podcasts.errors.unsupported"));
       return;
     }
 
@@ -293,7 +296,7 @@ function RecentPodcast() {
             className={`w-full sm:w-auto inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground font-semibold px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base ${hasEpisode && canPlay ? "hover:opacity-90" : "opacity-60 cursor-not-allowed"}`}
           >
             {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-            {isPlaying ? "Pause" : "Play"}
+            {isPlaying ? t("podcasts.pause") : t("podcasts.play")}
           </button>
           <a
             download
@@ -302,7 +305,7 @@ function RecentPodcast() {
             className={`w-full sm:w-auto inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base ${hasEpisode ? "hover:bg-muted" : "opacity-60 pointer-events-none"}`}
           >
             <Download className="w-4 h-4" />
-            Download
+            {t("podcasts.download")}
           </a>
         </div>
       </div>
@@ -336,7 +339,7 @@ function RecentPodcast() {
           preload="metadata"
           aria-hidden="true"
           onLoadedMetadata={(e) => setTotalDuration((e.currentTarget as HTMLAudioElement).duration || 0)}
-          onError={() => setPlayError("Playback failed. Please use the Download button or try another browser.")}
+          onError={() => setPlayError(t("podcasts.errors.playbackFailed"))}
         />
       ) : null}
     </div>
@@ -344,6 +347,7 @@ function RecentPodcast() {
 }
 
 function RecentPrayer() {
+  const { t } = useI18n();
   const [prayer, setPrayer] = useState<{ title: string; excerpt: string | null; date: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -384,13 +388,13 @@ function RecentPrayer() {
     <div className="rounded-xl border border-border bg-card p-6">
       <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
         <div className="flex-1">
-          <span className="inline-flex items-center text-xs font-medium text-accent mb-2">Recently Posted Morning Prayer</span>
-          <h3 className="font-semibold text-lg mb-1 break-words whitespace-normal">{loading ? "Loading..." : prayer?.title || "No recent prayer"}</h3>
-          <p className="text-muted-foreground text-sm mb-3 break-words whitespace-normal">{loading ? "Please wait while we fetch the latest prayer." : (prayer?.excerpt || "Check back soon for today's prayer.")}</p>
+          <span className="inline-flex items-center text-xs font-medium text-accent mb-2">{t("prayer.recentlyPosted")}</span>
+          <h3 className="font-semibold text-lg mb-1 break-words whitespace-normal">{loading ? t("prayer.loading") : prayer?.title || t("prayer.noRecent")}</h3>
+          <p className="text-muted-foreground text-sm mb-3 break-words whitespace-normal">{loading ? t("prayer.pleaseWait") : (prayer?.excerpt || t("prayer.checkBackSoon"))}</p>
           <span className="text-muted-foreground text-xs">{loading ? "" : (prayer?.date || "")}</span>
         </div>
         <Link href="/prayers" className="w-full sm:w-auto self-stretch sm:self-start inline-flex justify-center items-center rounded-full bg-accent text-accent-foreground font-semibold px-4 py-2 hover:opacity-90 mt-3 sm:mt-0">
-          Read now
+          {t("prayer.readNow")}
         </Link>
       </div>
     </div>
@@ -398,6 +402,7 @@ function RecentPrayer() {
 }
 
 export default function Home() {
+  const { t } = useI18n();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [headerHeight, setHeaderHeight] = useState(120);
 
@@ -456,19 +461,19 @@ export default function Home() {
             <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center min-h-[60vh] sm:min-h-[70vh] lg:min-h-[80vh]">
               <div className="space-y-6 sm:space-y-8">
                 <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight">
-                  <span className="block text-foreground drop-shadow-lg">FIND JESUS</span>
-                  <span className="block text-foreground drop-shadow-lg">FIND HOPE</span>
-                  <span className="block text-accent drop-shadow-lg">FIND PURPOSE</span>
+                  <span className="block text-foreground drop-shadow-lg">{t("home.hero.findJesus")}</span>
+                  <span className="block text-foreground drop-shadow-lg">{t("home.hero.findHope")}</span>
+                  <span className="block text-accent drop-shadow-lg">{t("home.hero.findPurpose")}</span>
                 </h1>
                 <p className="text-foreground/90 text-base sm:text-lg md:text-2xl max-w-prose drop-shadow-md">
-                  We are a Christ-centered church raising responsible kingdom labourers.
+                  {t("home.hero.tagline")}
                 </p>
                 <div className="flex flex-wrap gap-3 sm:gap-4">
                   <Link href="/prayers" className="inline-flex items-center rounded-full bg-accent text-accent-foreground font-semibold px-6 py-3 sm:px-7 sm:py-3.5 md:px-8 md:py-4 hover:bg-accent/90 transition-colors shadow-lg text-sm sm:text-base">
-                    Today's Prayer
+                    {t("home.hero.todaysPrayer")}
                   </Link>
-                  <Link href="/podcasts" className="inline-flex items-center rounded-full border-2 border-foreground/30 bg-foreground/10 backdrop-blur-sm px-6 py-3 sm:px-7 sm:py-3.5 md:px-8 md:py-4 hover:bg-foreground/20 transition-colors shadow-lg text-sm sm:text-base">
-                    Explore Podcasts
+                  <Link href="/podcasts" prefetch={false} className="inline-flex items-center rounded-full border-2 border-foreground/30 bg-foreground/10 backdrop-blur-sm px-6 py-3 sm:px-7 sm:py-3.5 md:px-8 md:py-4 hover:bg-foreground/20 transition-colors shadow-lg text-sm sm:text-base">
+                    {t("home.hero.explorePodcasts")}
                   </Link>
                 </div>
               </div>
@@ -499,19 +504,19 @@ export default function Home() {
         <section className="py-10 sm:py-14 bg-background">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             <div className="rounded-xl border border-border p-5 sm:p-6 bg-card">
-              <h3 className="font-semibold text-base sm:text-lg">Morning Prayer</h3>
-              <p className="text-sm text-muted-foreground mt-1.5 sm:mt-2">Start your day with a guided prayer. Updated daily.</p>
-              <Link href="/prayers" className="mt-3 sm:mt-4 inline-block text-accent">Read today’s prayer →</Link>
+              <h3 className="font-semibold text-base sm:text-lg">{t("home.highlights.morningPrayerTitle")}</h3>
+              <p className="text-sm text-muted-foreground mt-1.5 sm:mt-2">{t("home.highlights.morningPrayerDesc")}</p>
+              <Link href="/prayers" className="mt-3 sm:mt-4 inline-block text-accent">{t("home.highlights.morningPrayerLink")} →</Link>
             </div>
             <div className="rounded-xl border border-border p-5 sm:p-6 bg-card">
-              <h3 className="font-semibold text-base sm:text-lg">Podcasts</h3>
-              <p className="text-sm text-muted-foreground mt-1.5 sm:mt-2">Listen to sermons and messages on the go.</p>
-              <Link href="/podcasts" className="mt-3 sm:mt-4 inline-block text-accent">Play latest episode →</Link>
+              <h3 className="font-semibold text-base sm:text-lg">{t("home.highlights.podcastsTitle")}</h3>
+              <p className="text-sm text-muted-foreground mt-1.5 sm:mt-2">{t("home.highlights.podcastsDesc")}</p>
+              <Link href="/podcasts" prefetch={false} className="mt-3 sm:mt-4 inline-block text-accent">{t("home.highlights.podcastsLink")} →</Link>
             </div>
             <div className="rounded-xl border border-border p-5 sm:p-6 bg-card">
-              <h3 className="font-semibold text-base sm:text-lg">Events</h3>
-              <p className="text-sm text-muted-foreground mt-1.5 sm:mt-2">Stay updated with what’s happening at KGIC.</p>
-              <Link href="/events" className="mt-3 sm:mt-4 inline-block text-accent">See upcoming events →</Link>
+              <h3 className="font-semibold text-base sm:text-lg">{t("home.highlights.eventsTitle")}</h3>
+              <p className="text-sm text-muted-foreground mt-1.5 sm:mt-2">{t("home.highlights.eventsDesc")}</p>
+              <Link href="/events" className="mt-3 sm:mt-4 inline-block text-accent">{t("home.highlights.eventsLink")} →</Link>
             </div>
           </div>
         </section>
@@ -520,16 +525,16 @@ export default function Home() {
         <section className="pb-16 sm:pb-20 bg-background">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="mb-6 sm:mb-8">
-              <h2 className="text-2xl sm:text-3xl font-bold">Latest from KGIC</h2>
-              <p className="text-muted-foreground">Catch up with the most recent podcast and today’s morning prayer.</p>
+              <h2 className="text-2xl sm:text-3xl font-bold">{t("home.latest.sectionTitle")}</h2>
+              <p className="text-muted-foreground">{t("home.latest.sectionSubtitle")}</p>
             </div>
             <div className="grid lg:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-semibold mb-3 text-secondary-accent">Recently Uploaded Podcast</h3>
+                <h3 className="font-semibold mb-3 text-secondary-accent">{t("home.latest.recentlyUploadedPodcast")}</h3>
                 <RecentPodcast />
               </div>
               <div>
-                <h3 className="font-semibold mb-3 text-secondary-accent">Recently Posted Morning Prayer</h3>
+                <h3 className="font-semibold mb-3 text-secondary-accent">{t("home.latest.recentlyPostedPrayer")}</h3>
                 <RecentPrayer />
               </div>
             </div>
@@ -542,12 +547,12 @@ export default function Home() {
             <div className="rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/10 via-background to-accent/5 p-8 sm:p-10 min-h-[50svh] flex items-center">
               <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
                 <div>
-                  <p className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wide">Theme of the Year</p>
-                  <h2 className="text-3xl sm:text-5xl md:text-6xl font-extrabold leading-tight text-foreground mt-2">GREATER THINGS</h2>
+                  <p className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wide">{t("home.theme.yearLabel")}</p>
+                  <h2 className="text-3xl sm:text-5xl md:text-6xl font-extrabold leading-tight text-foreground mt-2">{t("home.theme.yearTitle")}</h2>
                 </div>
                 <div>
-                  <p className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wide">Theme of the Month</p>
-                  <p className="text-base sm:text-xl md:text-2xl text-foreground/90 mt-2">AUGUST 2025: BECAUSE I KNOW WHO I AM, I AM BUILT TO OVERCOME AND WIN</p>
+                  <p className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wide">{t("home.theme.monthLabel")}</p>
+                  <p className="text-base sm:text-xl md:text-2xl text-foreground/90 mt-2">{t("home.theme.monthTitle")}</p>
                 </div>
               </div>
             </div>

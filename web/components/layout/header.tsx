@@ -7,6 +7,7 @@ import React from "react";
 import { useTheme } from "@/components/ui/theme-provider";
 import { Moon, Sun } from "lucide-react";
 import { createPortal } from "react-dom";
+import { useI18n } from "@/components/ui/i18n-provider";
 
 interface HeaderProps {
   className?: string;
@@ -17,8 +18,10 @@ export function Header({ className = "" }: HeaderProps) {
   const [scrolled, setScrolled] = React.useState(false);
   const [menuOpen, setMenuOpen] = React.useState(false);
   const { theme, toggleTheme } = useTheme();
-  const [currentExhortation, setCurrentExhortation] = React.useState(0);
-  const [currentLanguage, setCurrentLanguage] = React.useState("en");
+  const { t, lang, setLanguage } = useI18n();
+  // remove exhortation state
+  // const [currentExhortation, setCurrentExhortation] = React.useState(0);
+  // const [currentLanguage, setCurrentLanguage] = React.useState("en");
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -37,14 +40,6 @@ export function Header({ className = "" }: HeaderProps) {
     };
   }, [menuOpen]);
 
-  // Animated exhortations
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentExhortation((prev) => (prev + 1) % exhortations.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
-
   const isActive = (path: string) => pathname === path;
 
   const socials: { name: "facebook" | "instagram" | "youtube" | "x" | "whatsapp" | "tiktok"; href: string; label: string }[] = [
@@ -56,19 +51,27 @@ export function Header({ className = "" }: HeaderProps) {
     { name: "tiktok", href: "https://tiktok.com/", label: "TikTok" },
   ];
 
-  const exhortations = [
-    { en: "Faith makes all things possible", fr: "La foi rend tout possible", es: "La fe hace que todo sea posible" },
-    { en: "God's love never fails", fr: "L'amour de Dieu ne faillit jamais", es: "El amor de Dios nunca falla" },
-    { en: "Trust in His perfect timing", fr: "Ayez confiance en Son timing parfait", es: "Confía en Su tiempo perfecto" },
-    { en: "Walk by faith, not by sight", fr: "Marchez par la foi, non par la vue", es: "Camina por fe, no por vista" },
-    { en: "His grace is sufficient", fr: "Sa grâce est suffisante", es: "Su gracia es suficiente" },
-  ];
-
   const languages = [
     { code: "en", name: "English", flag: "🇺🇸" },
     { code: "fr", name: "Français", flag: "🇫🇷" },
     { code: "es", name: "Español", flag: "🇪🇸" },
   ];
+
+  const [openLang, setOpenLang] = React.useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement | null>(null);
+  const buttonRef = React.useRef<HTMLButtonElement | null>(null);
+  React.useEffect(() => {
+    const onDoc = (e: Event) => {
+      if (!dropdownRef.current) return;
+      const target = e.target as Node | null;
+      if (!target) return;
+      // ignore clicks on the toggle button itself to avoid immediate close
+      if (buttonRef.current && buttonRef.current.contains(target)) return;
+      if (!dropdownRef.current.contains(target)) setOpenLang(false);
+    };
+    document.addEventListener("pointerdown", onDoc as any, { capture: true });
+    return () => document.removeEventListener("pointerdown", onDoc as any, { capture: true } as any);
+  }, []);
 
   const SocialIcon = ({ name }: { name: "facebook" | "instagram" | "youtube" | "x" | "whatsapp" | "tiktok" }) => {
     const getIconColor = () => {
@@ -132,10 +135,10 @@ export function Header({ className = "" }: HeaderProps) {
   return (
     <>
       {/* Top Social Bar */}
-      <div className="w-full bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border text-foreground/80">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-1.5 grid grid-cols-1 md:grid-cols-3 items-center gap-2">
+      <div className="relative z-[60] w-full bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border text-foreground/80">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-1.5 grid grid-cols-1 lg:grid-cols-3 items-center gap-2">
           {/* Left: Social Icons */}
-          <div className="flex items-center justify-center md:justify-start gap-2">
+          <div className="flex items-center justify-center lg:justify-start gap-2">
             {socials.map((s) => (
               <a
                 key={s.name}
@@ -151,42 +154,43 @@ export function Header({ className = "" }: HeaderProps) {
             ))}
           </div>
 
-          {/* Center: Animated Exhortation */}
-          <div className="hidden md:flex items-center justify-center text-center">
-            <div className="relative h-6 overflow-hidden">
-              <div 
-                className="absolute inset-0 transition-transform duration-1000 ease-in-out"
-                style={{ transform: `translateY(-${currentExhortation * 100}%)` }}
-              >
-                {exhortations.map((exhortation, index) => (
-                  <div
-                    key={index}
-                    className="h-6 flex items-center justify-center text-sm font-medium text-accent animate-pulse"
-                  >
-                    {exhortation[currentLanguage as keyof typeof exhortation]}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          {/* Center: (exhortation removed as requested) */}
+          <div className="hidden lg:flex items-center justify-center text-center" />
 
-          {/* Right: Language Changer */}
-          <div className="flex items-center justify-center md:justify-end gap-1">
-            {languages.map((lang) => (
-              <button
-                key={lang.code}
-                onClick={() => setCurrentLanguage(lang.code)}
-                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
-                  currentLanguage === lang.code
-                    ? "bg-accent text-accent-foreground"
-                    : "hover:bg-foreground/10"
-                }`}
-                title={lang.name}
-              >
-                <span className="mr-1">{lang.flag}</span>
-                {lang.code.toUpperCase()}
-              </button>
-            ))}
+          {/* Right: Language Dropdown */}
+          <div className="relative flex items-center justify-center lg:justify-end gap-1" ref={dropdownRef}>
+            <button
+              ref={buttonRef}
+              onClick={() => setOpenLang((v) => !v)}
+              className="px-2 py-1 rounded text-xs font-medium transition-colors border border-border bg-foreground/5 hover:bg-foreground/10 inline-flex items-center gap-2"
+              aria-haspopup="listbox"
+              aria-expanded={openLang}
+            >
+              <span className="text-sm">{languages.find(l => l.code === lang)?.flag}</span>
+              <span className="font-semibold">{lang.toUpperCase()}</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            {openLang && (
+              <div className="absolute top-full right-0 mt-2 z-[70] min-w-[160px] rounded-md border border-border bg-background shadow-lg">
+                <ul role="listbox">
+                  {languages.map((l) => (
+                    <li key={l.code}>
+                      <button
+                        role="option"
+                        aria-selected={lang === l.code}
+                        onClick={() => { setLanguage(l.code as any); setOpenLang(false); }}
+                        className={`w-full text-left px-3 py-2 text-sm hover:bg-accent/10 ${lang === l.code ? "text-accent font-semibold" : ""}`}
+                      >
+                        <span className="mr-2">{l.flag}</span>
+                        {l.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -194,9 +198,9 @@ export function Header({ className = "" }: HeaderProps) {
       <header className={`w-full sticky top-0 z-50 transition-colors ${
         scrolled ? 'border-b border-border bg-background/70 backdrop-blur' : 'bg-transparent border-b-0'
       } ${className}`}>
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-2 sm:py-3 grid grid-cols-[auto_1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-4">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-2 sm:py-3 grid grid-cols-[auto_1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-4">
         {/* Mobile: Hamburger */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <button
             type="button"
             aria-label="Open menu"
@@ -212,26 +216,26 @@ export function Header({ className = "" }: HeaderProps) {
         </div>
 
         {/* Spacer for centering on desktop */}
-        <div className="hidden md:block"></div>
+        <div className="hidden lg:block"></div>
 
         {/* Centered navigation group (desktop) */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-4">
           {/* Left Nav */}
           <nav className="flex items-center gap-6 text-sm">
             <Link href="/" className={isActive("/") ? "text-accent" : "hover:text-accent"}>
-              Home
+              {t("nav.home")}
             </Link>
             <Link href="/live" className={isActive("/live") ? "text-accent" : "hover:text-accent"}>
-              Live
+              {t("nav.live")}
             </Link>
             <Link href="/discover" className={isActive("/discover") ? "text-accent" : "hover:text-accent"}>
-              Discover
+              {t("nav.discover")}
             </Link>
             <Link href="/prayers" className={isActive("/prayers") ? "text-accent" : "hover:text-accent"}>
-              Morning Prayer
+              {t("nav.prayers")}
             </Link>
-            <Link href="/podcasts" className={isActive("/podcasts") ? "text-accent" : "hover:text-accent"}>
-              Podcasts
+            <Link href="/podcasts" prefetch={false} className={isActive("/podcasts") ? "text-accent" : "hover:text-accent"}>
+              {t("nav.podcasts")}
             </Link>
           </nav>
 
@@ -251,19 +255,19 @@ export function Header({ className = "" }: HeaderProps) {
           {/* Right Nav */}
           <nav className="flex items-center gap-6 text-sm">
             <Link href="/events" className={isActive("/events") ? "text-accent" : "hover:text-accent"}>
-              Events
+              {t("nav.events")}
             </Link>
             <Link href="/ministries" className={isActive("/ministries") ? "text-accent" : "hover:text-accent"}>
-              Ministries
+              {t("nav.ministries")}
             </Link>
             <Link href="/book-store" className={isActive("/book-store") ? "text-accent" : "hover:text-accent"}>
-              Book Store
+              {t("nav.bookStore")}
             </Link>
             <Link href="/about" className={isActive("/about") ? "text-accent" : "hover:text-accent"}>
-              About
+              {t("nav.about")}
             </Link>
             <Link href="/contact" className={isActive("/contact") ? "text-accent" : "hover:text-accent"}>
-              Contact
+              {t("nav.contact")}
             </Link>
           </nav>
 
@@ -278,17 +282,17 @@ export function Header({ className = "" }: HeaderProps) {
         </div>
 
         {/* Give Button (desktop) - far right */}
-        <div className="hidden md:flex justify-end">
+        <div className="hidden lg:flex justify-end">
           <Link 
             href="/give" 
             className="inline-flex items-center rounded-full bg-accent text-accent-foreground font-semibold px-4 py-2 hover:bg-accent/90 transition-colors text-sm"
           >
-            Give
+            {t("nav.give")}
           </Link>
         </div>
 
         {/* Mobile: Center Logo */}
-        <Link href="/" className="justify-self-center md:hidden">
+        <Link href="/" className="justify-self-center lg:hidden">
           <Image
             src="/logo.png"
             alt="KGIC logo"
@@ -300,12 +304,12 @@ export function Header({ className = "" }: HeaderProps) {
         </Link>
 
         {/* Mobile Give Button */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <Link 
             href="/give" 
             className="inline-flex items-center rounded-full bg-accent text-accent-foreground font-semibold px-3 py-1.5 hover:bg-accent/90 transition-colors text-xs"
           >
-            Give
+            {t("nav.give")}
           </Link>
         </div>
       </div>
@@ -329,16 +333,23 @@ export function Header({ className = "" }: HeaderProps) {
               </button>
             </div>
             <nav className="pt-6 pb-10 flex flex-col items-center gap-5 text-lg">
-              <Link href="/" onClick={() => setMenuOpen(false)} className={isActive("/") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Home</Link>
-              <Link href="/live" onClick={() => setMenuOpen(false)} className={isActive("/live") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Live</Link>
-              <Link href="/discover" onClick={() => setMenuOpen(false)} className={isActive("/discover") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Discover</Link>
-              <Link href="/prayers" onClick={() => setMenuOpen(false)} className={isActive("/prayers") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Morning Prayer</Link>
-              <Link href="/podcasts" onClick={() => setMenuOpen(false)} className={isActive("/podcasts") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Podcasts</Link>
-              <Link href="/events" onClick={() => setMenuOpen(false)} className={isActive("/events") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Events</Link>
-              <Link href="/ministries" onClick={() => setMenuOpen(false)} className={isActive("/ministries") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Ministries</Link>
-              <Link href="/book-store" onClick={() => setMenuOpen(false)} className={isActive("/book-store") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Book Store</Link>
-              <Link href="/about" onClick={() => setMenuOpen(false)} className={isActive("/about") ? "text-accent" : "text-foreground/90 hover:text-accent"}>About</Link>
-              <Link href="/contact" onClick={() => setMenuOpen(false)} className={isActive("/contact") ? "text-accent" : "text-foreground/90 hover:text-accent"}>Contact</Link>
+              <Link href="/" onClick={() => setMenuOpen(false)} className={isActive("/") ? "text-accent" : "text-foreground/90 hover:text-accent"}>{t("nav.home")}</Link>
+              <Link href="/live" onClick={() => setMenuOpen(false)} className={isActive("/live") ? "text-accent" : "text-foreground/90 hover:text-accent"}>{t("nav.live")}</Link>
+              <Link href="/discover" onClick={() => setMenuOpen(false)} className={isActive("/discover") ? "text-accent" : "text-foreground/90 hover:text-accent"}>{t("nav.discover")}</Link>
+              <Link href="/prayers" onClick={() => setMenuOpen(false)} className={isActive("/prayers") ? "text-accent" : "text-foreground/90 hover:text-accent"}>{t("nav.prayers")}</Link>
+              <Link href="/podcasts" onClick={() => setMenuOpen(false)} className={isActive("/podcasts") ? "text-accent" : "text-foreground/90 hover:text-accent"}>{t("nav.podcasts")}</Link>
+              <Link href="/events" onClick={() => setMenuOpen(false)} className={isActive("/events") ? "text-accent" : "text-foreground/90 hover:text-accent"}>{t("nav.events")}</Link>
+              <Link href="/ministries" onClick={() => setMenuOpen(false)} className={isActive("/ministries") ? "text-accent" : "text-foreground/90 hover:text-accent"}>{t("nav.ministries")}</Link>
+              <Link href="/book-store" onClick={() => setMenuOpen(false)} className={isActive("/book-store") ? "text-accent" : "text-foreground/90 hover:text-accent"}>{t("nav.bookStore")}</Link>
+              <Link href="/about" onClick={() => setMenuOpen(false)} className={isActive("/about") ? "text-accent" : "text-foreground/90 hover:text-accent"}>{t("nav.about")}</Link>
+              <Link href="/contact" onClick={() => setMenuOpen(false)} className={isActive("/contact") ? "text-accent" : "text-foreground/90 hover:text-accent"}>{t("nav.contact")}</Link>
+              <div className="flex gap-2 pt-4">
+                {languages.map((l) => (
+                  <button key={l.code} onClick={() => { setLanguage(l.code as any); setMenuOpen(false); }} className={`px-2 py-1 rounded text-xs ${lang===l.code?"bg-accent text-accent-foreground":"hover:bg-foreground/10"}`}>
+                    <span className="mr-1">{l.flag}</span>{l.code.toUpperCase()}
+                  </button>
+                ))}
+              </div>
               <button
                 onClick={() => {
                   toggleTheme();

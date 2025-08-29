@@ -1,52 +1,37 @@
 "use client";
 
-import { Download, PlayCircle, PauseCircle } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { Download, PlayCircle, PauseCircle, Music } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { useAudio } from "@/components/ui/audio-provider";
 
 interface PodcastCardProps {
-  id: number;
+  id: string | number;
   title: string;
   date: string;
   duration: string;
   audioUrl: string;
   artist?: string;
+  imageUrl?: string;
+  description?: string;
+  playCount?: number; // added
 }
 
-export function PodcastCard({ title, date, duration, audioUrl, artist = "KGIC" }: PodcastCardProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [totalDuration, setTotalDuration] = useState(0);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+export function PodcastCard({ id, title, date, duration, audioUrl, artist = "KGIC", imageUrl, description, playCount = 0 }: PodcastCardProps) {
+  // Remove local <audio> element usage; rely on global AudioProvider instead
   const [canPlay, setCanPlay] = useState(true);
   const [playError, setPlayError] = useState<string | null>(null);
+  const audio = useAudio();
 
+  // local display of play count with one-time optimistic bump when this track is started
+  const [localPlayCount, setLocalPlayCount] = useState<number>(playCount);
+  const hasIncrementedOnceRef = useRef<boolean>(false);
+
+  // Determine if this card is the one currently playing via global audio state
+  const isThis = !!audio && audio.currentPodcast?.id === id;
+  const isPlaying = !!audio && isThis && audio.isPlaying;
+
+  // Detect if the current browser can play the file type (by extension)
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setTotalDuration(audio.duration);
-    const onPlay = () => setIsPlaying(true);
-    const onPause = () => setIsPlaying(false);
-    const onEnded = () => setIsPlaying(false);
-
-    audio.addEventListener("timeupdate", updateTime);
-    audio.addEventListener("loadedmetadata", updateDuration);
-    audio.addEventListener("play", onPlay);
-    audio.addEventListener("pause", onPause);
-    audio.addEventListener("ended", onEnded);
-
-    return () => {
-      audio.removeEventListener("timeupdate", updateTime);
-      audio.removeEventListener("loadedmetadata", updateDuration);
-      audio.removeEventListener("play", onPlay);
-      audio.removeEventListener("pause", onPause);
-      audio.removeEventListener("ended", onEnded);
-    };
-  }, []);
-
-  useEffect(() => {
-    // Detect if the current browser can play the file type (by extension)
     setPlayError(null);
     try {
       const tester = document.createElement("audio");
@@ -71,50 +56,52 @@ export function PodcastCard({ title, date, duration, audioUrl, artist = "KGIC" }
   }, [audioUrl]);
 
   const togglePlay = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
     if (!canPlay) {
       setPlayError("This audio format isn't supported by your browser. Please use Download to listen.");
       return;
     }
-    
-    if (isPlaying) {
-      audio.pause();
+    if (!audio) return;
+
+    if (!isThis) {
+      // optimistic UI increment once per session for this card
+      if (!hasIncrementedOnceRef.current) {
+        setLocalPlayCount((c) => c + 1);
+        hasIncrementedOnceRef.current = true;
+      }
+      audio.playPodcast({ id, title, artist: artist || "KGIC", audioUrl, imageUrl });
     } else {
-      audio.play().catch(() => setIsPlaying(false));
+      audio.togglePlayPause();
     }
   };
-
-  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const audio = audioRef.current;
-    if (!audio || !totalDuration) return;
-
-    const rect = e.currentTarget.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const width = rect.width;
-    const newTime = (clickX / width) * totalDuration;
-    
-    audio.currentTime = newTime;
-  };
-
-  const formatTime = (time: number) => {
-    if (!time || isNaN(time)) return "0:00";
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
-
-  const progress = totalDuration > 0 ? (currentTime / totalDuration) * 100 : 0;
 
   return (
     <div className="rounded-xl border border-border bg-card p-6">
       <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4 mb-4">
-        <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-lg break-words whitespace-normal">{title}</h3>
-          <p className="text-muted-foreground text-sm mt-1 break-words">
-            {artist} • {date} • {duration}
-          </p>
+        <div className="flex items-start gap-4 w-full">
+          {/* Artwork */}
+          <div className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-md overflow-hidden bg-muted flex items-center justify-center">
+            {imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={imageUrl} alt="Artwork" className="w-full h-full object-cover" />
+            ) : (
+              <Music className="w-7 h-7 text-muted-foreground" />
+            )}
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-lg break-words whitespace-normal">{title}</h3>
+            <p className="text-muted-foreground text-sm mt-1 break-words">
+              {artist} • {date} • {duration} • <span title="Play count">{localPlayCount}</span> plays
+            </p>
+            {/* Description */}
+            {(description || !description) && (
+              <p className="text-muted-foreground/90 text-sm mt-2 break-words leading-relaxed">
+                {description || "Join us for this inspiring message filled with biblical wisdom and practical insights for your spiritual journey. Experience God's word in a fresh way as we explore timeless truths that transform lives."}
+              </p>
+            )}
+          </div>
         </div>
+
         <div className="w-full sm:w-auto grid grid-cols-2 gap-2 sm:flex sm:gap-2 mt-3 sm:mt-0">
           <button 
             onClick={togglePlay}
@@ -139,25 +126,10 @@ export function PodcastCard({ title, date, duration, audioUrl, artist = "KGIC" }
         <p className="text-xs text-amber-600 mb-2">{playError}</p>
       )}
 
-      {/* Progress Bar */}
-      <div className="space-y-2">
-        <div 
-          className="w-full h-2 bg-muted rounded-full cursor-pointer"
-          onClick={handleProgressClick}
-        >
-          <div 
-            className="h-2 bg-accent rounded-full transition-all duration-150"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <div className="flex justify-between text-xs text-muted-foreground">
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(totalDuration)}</span>
-        </div>
-      </div>
+      {/* Removed local progress visualization tied to card-level audio */}
+      {/* Previously there was a hidden progress bar; removed to prevent unused references */}
 
-      {/* Hidden audio element */}
-      <audio ref={audioRef} src={audioUrl} preload="metadata" aria-hidden="true" onError={() => setPlayError("Playback failed. Please use Download to listen or try another browser.")} />
+      {/* Removed hidden <audio> element to avoid duplicate network requests that cause net::ERR_ABORTED */}
     </div>
   );
 }
