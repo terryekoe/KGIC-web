@@ -181,14 +181,14 @@ export default function BookStorePage() {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white">
+        <div className="bg-accent text-accent-foreground">
           <div className="mx-auto max-w-7xl px-6 py-16">
             <div className="text-center">
               <BookOpen className="w-16 h-16 mx-auto mb-6" />
               <h1 className="text-4xl sm:text-5xl font-bold mb-4">
                 Church Book Store
               </h1>
-              <p className="text-xl text-blue-100 max-w-2xl mx-auto mb-8">
+              <p className="text-xl opacity-90 max-w-2xl mx-auto mb-8">
                 Discover inspiring Christian books that will strengthen your faith and deepen your relationship with God
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -201,7 +201,7 @@ export default function BookStorePage() {
                   <User className="w-5 h-5" />
                   My Library ({purchasedBooks.length})
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2 text-white border-white hover:bg-white hover:text-indigo-600">
+                <Button size="lg" variant="outline" className="gap-2 border-accent-foreground/30 bg-accent-foreground/10 backdrop-blur-sm hover:bg-accent-foreground/20">
                   <ShoppingBag className="w-5 h-5" />
                   Browse Books
                 </Button>

@@ -1,0 +1,30 @@
+# Robots.txt for KGIC Church Website
+# https://kgic-web.vercel.app
+
+User-agent: *
+Allow: /
+
+# Disallow admin and API routes
+Disallow: /admin
+Disallow: /api/
+
+# Disallow authentication pages from indexing
+Disallow: /auth/
+
+# Allow important pages
+Allow: /about
+Allow: /contact
+Allow: /discover
+Allow: /events
+Allow: /give
+Allow: /live
+Allow: /ministries
+Allow: /podcasts
+Allow: /prayers
+Allow: /book-store
+
+# Sitemap location
+Sitemap: https://kgic-web.vercel.app/sitemap.xml
+
+# Crawl delay (optional)
+Crawl-delay: 1

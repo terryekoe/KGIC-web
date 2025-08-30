@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { FileText, Mic, Calendar, Image, Settings, Moon, Sun, LogIn, LogOut, Megaphone, Church, Users } from "lucide-react";
+import { FileText, Mic, Calendar, Image, Settings, Moon, Sun, LogIn, LogOut, Megaphone, Church, Users, BookOpen } from "lucide-react";
 import { useTheme } from "@/components/ui/theme-provider";
 import { getSupabaseClient } from "@/lib/supabaseClient";
 import Link from "next/link";
@@ -790,6 +790,490 @@ function AdminPodcasts() {
   );
 }
 
+// Admin Books CRUD component
+function AdminBooks() {
+  const supabase = getSupabaseClient();
+  const [loading, setLoading] = React.useState<boolean>(true);
+  const [saving, setSaving] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState<string | null>(null);
+  
+  // Upload state
+  const [uploading, setUploading] = React.useState<boolean>(false);
+  const [uploadError, setUploadError] = React.useState<string | null>(null);
+  const coverInputRef = React.useRef<HTMLInputElement | null>(null);
+  const contentInputRef = React.useRef<HTMLInputElement | null>(null);
+  
+  // Form state
+  const [title, setTitle] = React.useState("");
+  const [author, setAuthor] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [price, setPrice] = React.useState<string>("");
+  const [discountPrice, setDiscountPrice] = React.useState<string>("");
+  const [category, setCategory] = React.useState("");
+  const [coverUrl, setCoverUrl] = React.useState("");
+  const [contentUrl, setContentUrl] = React.useState("");
+  const [readingTime, setReadingTime] = React.useState("");
+  const [status, setStatus] = React.useState<string>("draft");
+  const [isFeatured, setIsFeatured] = React.useState<boolean>(false);
+  
+  // Define Book type
+  type Book = {
+    id: string;
+    title: string;
+    author: string;
+    description: string | null;
+    price: number;
+    discount_price: number | null;
+    category: string | null;
+    cover_url: string | null;
+    content_url: string | null;
+    reading_time: string | null;
+    status: string;
+    is_featured: boolean;
+    created_at: string;
+    updated_at: string;
+  };
+  
+  const [books, setBooks] = React.useState<Book[]>([]);
+  const [editingId, setEditingId] = React.useState<string | null>(null);
+  
+  const resetForm = () => {
+    setEditingId(null);
+    setTitle("");
+    setAuthor("");
+    setDescription("");
+    setPrice("");
+    setDiscountPrice("");
+    setCategory("");
+    setCoverUrl("");
+    setContentUrl("");
+    setReadingTime("");
+    setStatus("draft");
+    setIsFeatured(false);
+  };
+  
+  const fetchBooks = async () => {
+    if (!supabase) {
+      setError("Supabase not configured. Set env vars.");
+      setLoading(false);
+      return;
+    }
+    setError(null);
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("books")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) setError(error.message);
+    else setBooks((data as Book[]) || []);
+    setLoading(false);
+  };
+  
+  React.useEffect(() => {
+    fetchBooks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!supabase) return;
+    setSaving(true);
+    setError(null);
+    setSuccess(null);
+    
+    const priceNum = parseFloat(price) || 0;
+    const discountPriceNum = discountPrice ? parseFloat(discountPrice) : null;
+    
+    const payload: Partial<Book> = {
+      title,
+      author,
+      description: description || null,
+      price: priceNum,
+      discount_price: discountPriceNum,
+      category: category || null,
+      cover_url: coverUrl || null,
+      content_url: contentUrl || null,
+      reading_time: readingTime || null,
+      status,
+      is_featured: isFeatured,
+    } as any;
+    
+    try {
+      if (editingId) {
+        const { error } = await supabase.from("books").update(payload).eq("id", editingId);
+        if (error) throw error;
+        setSuccess("Book updated.");
+      } else {
+        const { error } = await supabase.from("books").insert(payload);
+        if (error) throw error;
+        setSuccess("Book created.");
+      }
+      resetForm();
+      await fetchBooks();
+    } catch (err: any) {
+      setError(err.message || "Failed to save book.");
+    } finally {
+      setSaving(false);
+    }
+  };
+  
+  const handleEdit = (b: Book) => {
+    setEditingId(b.id);
+    setTitle(b.title || "");
+    setAuthor(b.author || "");
+    setDescription(b.description || "");
+    setPrice(b.price ? String(b.price) : "");
+    setDiscountPrice(b.discount_price ? String(b.discount_price) : "");
+    setCategory(b.category || "");
+    setCoverUrl(b.cover_url || "");
+    setContentUrl(b.content_url || "");
+    setReadingTime(b.reading_time || "");
+    setStatus(b.status || "draft");
+    setIsFeatured(b.is_featured || false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  
+  const handleDelete = async (id: string) => {
+    if (!supabase) return;
+    const ok = window.confirm("Delete this book? This cannot be undone.");
+    if (!ok) return;
+    setError(null);
+    try {
+      const { error } = await supabase.from("books").delete().eq("id", id);
+      if (error) throw error;
+      setSuccess("Book deleted.");
+      await fetchBooks();
+    } catch (err: any) {
+      setError(err.message || "Failed to delete book.");
+    }
+  };
+  
+  const publishNow = async (id: string) => {
+    if (!supabase) return;
+    setError(null);
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from("books")
+        .update({ status: "published" })
+        .eq("id", id);
+      if (error) throw error;
+      setSuccess("Book published.");
+      await fetchBooks();
+    } catch (err: any) {
+      setError(err.message || "Failed to publish book.");
+    } finally {
+      setSaving(false);
+    }
+  };
+  
+  // File upload handlers
+  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Validate image format
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError("Please upload a valid image file (JPEG, PNG, or WebP).");
+      if (coverInputRef.current) coverInputRef.current.value = "";
+      return;
+    }
+    
+    setUploadError(null);
+    setUploading(true);
+    
+    try {
+      // In a real implementation, you would upload to Supabase Storage
+      // For now, we'll simulate the upload
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const mockUrl = `/covers/${file.name}`;
+      setCoverUrl(mockUrl);
+      setSuccess("Cover image uploaded successfully.");
+    } catch (err: any) {
+      setUploadError(err.message || "Failed to upload cover image.");
+    } finally {
+      setUploading(false);
+    }
+  };
+  
+  const handleContentUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Validate content format
+    const allowedTypes = ['application/pdf', 'text/plain', 'application/epub+zip'];
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError("Please upload a valid content file (PDF, TXT, or EPUB).");
+      if (contentInputRef.current) contentInputRef.current.value = "";
+      return;
+    }
+    
+    setUploadError(null);
+    setUploading(true);
+    
+    try {
+      // In a real implementation, you would upload to Supabase Storage
+      // For now, we'll simulate the upload
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      const mockUrl = `/content/${file.name}`;
+      setContentUrl(mockUrl);
+      setSuccess("Book content uploaded successfully.");
+    } catch (err: any) {
+      setUploadError(err.message || "Failed to upload book content.");
+    } finally {
+      setUploading(false);
+    }
+  };
+  
+  return (
+    <Card className="border-border bg-card">
+      <CardHeader>
+        <CardTitle>Books Management</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {error && (
+          <div className="mb-4 p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-sm">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="mb-4 p-3 rounded-md bg-green-50 border border-green-200 text-green-700 text-sm">
+            {success}
+          </div>
+        )}
+        {uploadError && (
+          <div className="mb-4 p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-sm">
+            {uploadError}
+          </div>
+        )}
+        
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Title *</label>
+              <Input
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Book title"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Author *</label>
+              <Input
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+                placeholder="Author name"
+                required
+              />
+            </div>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium mb-1">Description</label>
+            <Textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Book description"
+              rows={3}
+            />
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Price ($) *</label>
+              <Input
+                type="number"
+                step="0.01"
+                min="0"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="19.99"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Discount Price ($)</label>
+              <Input
+                type="number"
+                step="0.01"
+                min="0"
+                value={discountPrice}
+                onChange={(e) => setDiscountPrice(e.target.value)}
+                placeholder="14.99"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Reading Time</label>
+              <Input
+                value={readingTime}
+                onChange={(e) => setReadingTime(e.target.value)}
+                placeholder="3-4 hours"
+              />
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Category</label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full px-3 py-2 border border-border rounded-md bg-background"
+              >
+                <option value="">Select category</option>
+                <option value="Faith">Faith</option>
+                <option value="Worship">Worship</option>
+                <option value="Leadership">Leadership</option>
+                <option value="Grace">Grace</option>
+                <option value="Prayer">Prayer</option>
+                <option value="Family">Family</option>
+                <option value="Theology">Theology</option>
+                <option value="Devotional">Devotional</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Status</label>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="w-full px-3 py-2 border border-border rounded-md bg-background"
+              >
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+              </select>
+            </div>
+          </div>
+          
+          {/* File Uploads */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Cover Image</label>
+              <input
+                ref={coverInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleCoverUpload}
+                className="w-full px-3 py-2 border border-border rounded-md bg-background text-sm"
+              />
+              {coverUrl && (
+                <p className="text-xs text-green-600 mt-1">✓ Cover uploaded: {coverUrl}</p>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Book Content</label>
+              <input
+                ref={contentInputRef}
+                type="file"
+                accept=".pdf,.txt,.epub"
+                onChange={handleContentUpload}
+                className="w-full px-3 py-2 border border-border rounded-md bg-background text-sm"
+              />
+              {contentUrl && (
+                <p className="text-xs text-green-600 mt-1">✓ Content uploaded: {contentUrl}</p>
+              )}
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="featured"
+              checked={isFeatured}
+              onChange={(e) => setIsFeatured(e.target.checked)}
+              className="rounded"
+            />
+            <label htmlFor="featured" className="text-sm font-medium">Featured Book</label>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Button type="submit" className="gap-2" disabled={saving || uploading}>
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              {editingId ? "Update Book" : "Create Book"}
+            </Button>
+            {editingId && (
+              <Button type="button" variant="outline" className="gap-2" onClick={resetForm}>
+                <X className="h-4 w-4" />
+                Cancel
+              </Button>
+            )}
+            {uploading && (
+              <span className="text-sm text-muted-foreground">Uploading...</span>
+            )}
+          </div>
+        </form>
+        
+        {/* List */}
+        <div className="mt-8">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold">Existing Books</h3>
+            <Button variant="outline" className="gap-2" onClick={resetForm}>
+              <Plus className="h-4 w-4" /> New
+            </Button>
+          </div>
+          
+          {loading ? (
+            <p className="text-sm text-muted-foreground">Loading books…</p>
+          ) : books.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No books found.</p>
+          ) : (
+            <div className="space-y-3">
+              {books.map((b) => (
+                <div key={b.id} className="rounded-lg border border-border p-4 bg-card flex items-start justify-between gap-4">
+                  <div className="flex gap-4">
+                    {b.cover_url && (
+                      <div className="w-12 h-16 bg-muted rounded overflow-hidden flex-shrink-0">
+                        <img src={b.cover_url} alt={b.title} className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        {b.is_featured && <span className="text-xs font-medium text-accent">Featured</span>}
+                        <span className="text-xs text-muted-foreground">{b.status}</span>
+                        {b.category && <span className="text-xs text-muted-foreground">• {b.category}</span>}
+                      </div>
+                      <p className="font-medium">{b.title}</p>
+                      <p className="text-sm text-muted-foreground">by {b.author}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-sm font-medium">${b.price}</span>
+                        {b.discount_price && (
+                          <span className="text-sm text-green-600">${b.discount_price} (discounted)</span>
+                        )}
+                        {b.reading_time && (
+                          <span className="text-xs text-muted-foreground">• {b.reading_time}</span>
+                        )}
+                      </div>
+                      {b.description && (
+                        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{b.description}</p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    {b.status !== "published" && (
+                      <Button variant="default" size="sm" className="gap-2" onClick={() => publishNow(b.id)}>
+                        <Megaphone className="h-4 w-4" /> Publish
+                      </Button>
+                    )}
+                    <Button variant="outline" size="sm" className="gap-2" onClick={() => handleEdit(b)}>
+                      <Pencil className="h-4 w-4" /> Edit
+                    </Button>
+                    <Button variant="destructive" size="sm" className="gap-2" onClick={() => handleDelete(b.id)}>
+                      <Trash2 className="h-4 w-4" /> Delete
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 // Admin Announcements CRUD component
 function AdminAnnouncements() {
   const supabase = getSupabaseClient();
@@ -1458,7 +1942,7 @@ export default function AdminPage() {
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold">Admin Dashboard</h1>
           <p className="text-muted-foreground mt-2">
-            Manage content for Morning Prayers, Podcasts, Announcements, Ministries, Small Groups, Events, and the homepage hero.
+            Manage content for Morning Prayers, Podcasts, Books, Announcements, Ministries, Small Groups, Events, and the homepage hero.
           </p>
         </div>
 
@@ -1466,6 +1950,7 @@ export default function AdminPage() {
           <TabsList>
             <TabsTrigger value="prayers" className="gap-2"><FileText className="h-4 w-4" /> Prayers</TabsTrigger>
             <TabsTrigger value="podcasts" className="gap-2"><Mic className="h-4 w-4" /> Podcasts</TabsTrigger>
+            <TabsTrigger value="books" className="gap-2"><BookOpen className="h-4 w-4" /> Books</TabsTrigger>
             <TabsTrigger value="announcements" className="gap-2"><Megaphone className="h-4 w-4" /> Announcements</TabsTrigger>
             <TabsTrigger value="ministries" className="gap-2"><Church className="h-4 w-4" /> Ministries</TabsTrigger>
             <TabsTrigger value="groups" className="gap-2"><Users className="h-4 w-4" /> Groups</TabsTrigger>
@@ -1480,6 +1965,10 @@ export default function AdminPage() {
 
           <TabsContent value="podcasts" className="mt-6">
             <AdminPodcasts />
+          </TabsContent>
+
+          <TabsContent value="books" className="mt-6">
+            <AdminBooks />
           </TabsContent>
 
           <TabsContent value="announcements" className="mt-6">
