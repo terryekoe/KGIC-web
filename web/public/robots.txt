@@ -1,5 +1,5 @@
-# Robots.txt for KGIC Church Website
-# https://kgic-web.vercel.app
+# Robots.txt for The King's Generals Church Website
+# https://thekingsgenerals.com
 
 User-agent: *
 Allow: /
@@ -24,7 +24,7 @@ Allow: /prayers
 Allow: /book-store
 
 # Sitemap location
-Sitemap: https://kgic-web.vercel.app/sitemap.xml
+Sitemap: https://thekingsgenerals.com/sitemap.xml
 
 # Crawl delay (optional)
 Crawl-delay: 1
