@@ -3,7 +3,6 @@ import Link from "next/link";
 import { MapPin, Phone } from "lucide-react";
 
 export function Footer() {
-  const year = new Date().getFullYear();
   return (
     <footer className="mt-12 sm:mt-16 border-t border-border bg-background text-foreground">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10 sm:py-12">
@@ -93,7 +92,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-8 sm:mt-10 border-t border-border pt-4 sm:pt-6 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-3 sm:gap-4 text-xs text-muted-foreground">
-          <p>© {year} The King's Generals International Church. All rights reserved.</p>
+          <p>© 2024 The King's Generals International Church. All rights reserved.</p>
           <p className="text-center sm:text-right">Built with ❤️ for the Kingdom</p>
         </div>
       </div>
