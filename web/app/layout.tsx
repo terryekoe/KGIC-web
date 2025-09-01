@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Roboto_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { cookies } from "next/headers";
@@ -10,11 +10,6 @@ import { PerformanceMonitor } from "@/components/ui/performance-monitor";
 
 const inter = Inter({
   variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const robotoMono = Roboto_Mono({
-  variable: "--font-roboto-mono",
   subsets: ["latin"],
 });
 
@@ -86,11 +81,13 @@ export default async function RootLayout({
         <meta name="theme-color" content="#000000" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Load Roboto Mono via Google Fonts to avoid next/font Turbopack issue */}
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
         <link rel="dns-prefetch" href="https://thekingsgenerals.com" />
         <link rel="preload" href="/logo.png" as="image" type="image/png" />
       </head>
       <body
-        className={`${inter.variable} ${robotoMono.variable} antialiased`}
+        className={`${inter.variable} antialiased`}
       >
         {/* Theme Provider */}
         {/* eslint-disable-next-line react/no-unknown-property */}
