@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getSupabaseClient } from "@/lib/supabaseClient";
+import { getSupabaseClient, safeSupabaseAuth } from "@/lib/supabaseClient";
 import { LogIn } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
@@ -54,9 +54,13 @@ function SignInInner() {
       return;
     }
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setError(error.message);
+    const result = await safeSupabaseAuth(
+      () => supabase.auth.signInWithPassword({ email, password }),
+      { data: null, error: { message: 'Network error occurred. Please try again.' } }
+    );
+    
+    if (!result || result.error) {
+      setError(result?.error?.message || 'Authentication failed. Please try again.');
       setLoading(false);
       return;
     }

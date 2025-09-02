@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { FileText, Mic, Calendar, Image, Settings, Moon, Sun, LogIn, LogOut, Megaphone, Church, Users, BookOpen } from "lucide-react";
 import { useTheme } from "@/components/ui/theme-provider";
-import { getSupabaseClient } from "@/lib/supabaseClient";
+import { getSupabaseClient, safeSupabaseAuth } from "@/lib/supabaseClient";
 import Link from "next/link";
 import NextImage from "next/image";
 import React from "react";
@@ -30,8 +30,12 @@ function AdminTopBar() {
       return;
     }
 
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    // Get initial session with error handling
+    safeSupabaseAuth(
+      () => supabase.auth.getSession(),
+      { data: { session: null } }
+    ).then((result) => {
+      const session = result?.data?.session ?? null;
       setUser(session?.user ?? null);
       setLoading(false);
     });
@@ -1903,8 +1907,12 @@ export default function AdminPage() {
       return;
     }
 
-    // Initial session check
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    // Initial session check with error handling
+    safeSupabaseAuth(
+      () => supabase.auth.getSession(),
+      { data: { session: null } }
+    ).then((result) => {
+      const session = result?.data?.session ?? null;
       if (session?.user) {
         setAuthed(true);
       } else {
