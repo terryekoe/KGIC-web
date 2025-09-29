@@ -1,6 +1,12 @@
-import { Calendar, Clock } from "lucide-react";
-import { parseAndRenderTextWithHtml } from "@/lib/textUtils";
+'use client';
+
+import { Calendar, Clock, Share2 } from "lucide-react";
+import { parseAndRenderTextWithHtml, parsePrayerContent } from "@/lib/textUtils";
+import { shareContent, generateShareUrl, generateShareText } from "@/lib/shareUtils";
+import { ShareModal } from "./share-modal";
+import { ReminderModal } from "./reminder-modal";
 import Link from "next/link";
+import { useState } from "react";
 
 interface PrayerCardProps {
   id?: string | number;
@@ -23,39 +29,98 @@ export function PrayerCard({
   showActions = true, 
   variant = "preview" 
 }: PrayerCardProps) {
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [showReminderModal, setShowReminderModal] = useState(false);
+
+  const handleShare = async () => {
+    if (!id) return;
+    
+    const shareUrl = generateShareUrl(id);
+    const shareText = generateShareText(title);
+    
+    const shared = await shareContent({
+      title,
+      text: shareText,
+      url: shareUrl
+    });
+    
+    // If Web Share API failed or not available, show fallback modal
+    if (!shared) {
+      setShowShareModal(true);
+    }
+  };
   if (variant === "full") {
+    // Parse the content to separate references from prayer text
+    const { references, prayerText } = parsePrayerContent(content || '');
+
     return (
       <div className="rounded-xl border border-border bg-card p-8">
-        <div className="flex flex-wrap items-center gap-4 mb-6">
-          <span className="inline-flex items-center gap-2 text-accent text-sm font-medium">
-            <Calendar className="w-4 h-4" />
-            Today's Prayer
-          </span>
-          <span className="text-muted-foreground text-sm">{date}</span>
-          {author && <span className="text-muted-foreground text-sm">by {author}</span>}
+        <div className="flex items-center gap-2 text-muted-foreground text-sm mb-4">
+          <Calendar className="w-4 h-4" />
+          <span>{date}</span>
+          {author && <span>• {author}</span>}
         </div>
-
-        <h2 className="text-2xl font-bold mb-6">{title}</h2>
         
-        {content && (
+        <h1 className="text-3xl font-bold mb-6">{title}</h1>
+        
+        {/* Display scripture references first if they exist */}
+        {references && (
+          <div className="mb-6 p-4 bg-muted/50 rounded-lg border-l-4 border-accent">
+            <div className="text-sm font-medium text-muted-foreground mb-2">Scripture References</div>
+            <div className="text-foreground/90 leading-relaxed">
+              {parseAndRenderTextWithHtml(references.replace(/^References:\s*/i, ''))}
+            </div>
+          </div>
+        )}
+
+        {/* Display the main prayer content */}
+        {prayerText && (
           <div className="prose prose-invert max-w-none">
             {/* Preserve line breaks and allow **bold** or <b>/<strong> inline */}
             <div className="whitespace-pre-line text-foreground/90 leading-relaxed">
-              {parseAndRenderTextWithHtml(content)}
+              {parseAndRenderTextWithHtml(prayerText)}
             </div>
           </div>
         )}
 
         {showActions && (
           <div className="mt-8 flex flex-wrap gap-4">
-            <button className="inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground font-semibold px-6 py-3 hover:opacity-90">
+            <button 
+              onClick={() => setShowReminderModal(true)}
+              className="inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground font-semibold px-6 py-3 hover:opacity-90"
+            >
               <Clock className="w-4 h-4" />
               Set Daily Reminder
             </button>
-            <button className="inline-flex items-center rounded-full border border-border px-6 py-3 hover:bg-muted">
+            <button 
+              onClick={handleShare}
+              className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 hover:bg-muted"
+            >
+              <Share2 className="w-4 h-4" />
               Share Prayer
             </button>
           </div>
+        )}
+
+        {/* Share Modal */}
+        {id && (
+          <ShareModal
+            isOpen={showShareModal}
+            onClose={() => setShowShareModal(false)}
+            title={title}
+            url={generateShareUrl(id)}
+            text={generateShareText(title)}
+          />
+        )}
+
+        {/* Reminder Modal */}
+        {id && (
+          <ReminderModal
+            isOpen={showReminderModal}
+            onClose={() => setShowReminderModal(false)}
+            prayerTitle={title}
+            prayerId={id}
+          />
         )}
       </div>
     );

@@ -8,6 +8,7 @@ import { BookReader } from "@/components/ui/book-reader";
 import { PurchaseModal } from "@/components/ui/purchase-modal";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/components/ui/i18n-provider";
+import { ComingSoonOverlay } from "@/components/ui/coming-soon-overlay";
 
 // Sample book data - in a real app, this would come from your database
 const SAMPLE_BOOKS = [
@@ -179,171 +180,173 @@ export default function BookStorePage() {
     <div className="min-h-screen flex flex-col">
       <Header />
       
-      <main className="flex-1">
-        {/* Hero Section */}
-        <div className="bg-accent text-accent-foreground">
-          <div className="mx-auto max-w-7xl px-6 py-16">
-            <div className="text-center">
-              <BookOpen className="w-16 h-16 mx-auto mb-6" />
-              <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-                Church Book Store
-              </h1>
-              <p className="text-xl opacity-90 max-w-2xl mx-auto mb-8">
-                Discover inspiring Christian books that will strengthen your faith and deepen your relationship with God
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  size="lg" 
-                  variant="secondary"
-                  onClick={() => setShowLibrary(!showLibrary)}
-                  className="gap-2"
-                >
-                  <User className="w-5 h-5" />
-                  My Library ({purchasedBooks.length})
-                </Button>
-                <Button size="lg" variant="outline" className="gap-2 border-accent-foreground/30 bg-accent-foreground/10 backdrop-blur-sm hover:bg-accent-foreground/20">
-                  <ShoppingBag className="w-5 h-5" />
-                  Browse Books
-                </Button>
+      <ComingSoonOverlay>
+        <main className="flex-1">
+          {/* Hero Section */}
+          <div className="bg-accent text-accent-foreground">
+            <div className="mx-auto max-w-7xl px-6 py-16">
+              <div className="text-center">
+                <BookOpen className="w-16 h-16 mx-auto mb-6" />
+                <h1 className="text-4xl sm:text-5xl font-bold mb-4">
+                  Church Book Store
+                </h1>
+                <p className="text-xl opacity-90 max-w-2xl mx-auto mb-8">
+                  Discover inspiring Christian books that will strengthen your faith and deepen your relationship with God
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button 
+                    size="lg" 
+                    variant="secondary"
+                    onClick={() => setShowLibrary(!showLibrary)}
+                    className="gap-2"
+                  >
+                    <User className="w-5 h-5" />
+                    My Library ({purchasedBooks.length})
+                  </Button>
+                  <Button size="lg" variant="outline" className="gap-2 border-accent-foreground/30 bg-accent-foreground/10 backdrop-blur-sm hover:bg-accent-foreground/20">
+                    <ShoppingBag className="w-5 h-5" />
+                    Browse Books
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="mx-auto max-w-7xl px-6 py-8">
-          {/* Library Section */}
-          {showLibrary && (
-            <div className="mb-8 p-6 bg-card border border-border rounded-lg">
-              <h2 className="text-2xl font-bold mb-4">My Library</h2>
-              {purchasedBooksData.length > 0 ? (
+          <div className="mx-auto max-w-7xl px-6 py-8">
+            {/* Library Section */}
+            {showLibrary && (
+              <div className="mb-8 p-6 bg-card border border-border rounded-lg">
+                <h2 className="text-2xl font-bold mb-4">My Library</h2>
+                {purchasedBooksData.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {purchasedBooksData.map(book => (
+                      <BookCard
+                        key={book.id}
+                        book={book}
+                        onRead={handleRead}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <BookOpen className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                    <p className="text-muted-foreground">No books in your library yet. Start browsing to purchase your first book!</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Search and Filters */}
+            <div className="mb-8">
+              <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder="Search books, authors, or topics..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="gap-2"
+                >
+                  <Filter className="w-4 h-4" />
+                  Filters
+                </Button>
+              </div>
+
+              {/* Category Filters */}
+              {showFilters && (
+                <div className="mb-6 p-4 bg-muted/50 rounded-lg">
+                  <h3 className="font-medium mb-3">Categories</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {CATEGORIES.map(category => (
+                      <button
+                        key={category}
+                        onClick={() => setSelectedCategory(category)}
+                        className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
+                          selectedCategory === category
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-background border border-border hover:bg-muted"
+                        }`}
+                      >
+                        {category}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Books Grid */}
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold">
+                  {selectedCategory === "All" ? "All Books" : `${selectedCategory} Books`}
+                </h2>
+                <span className="text-muted-foreground">
+                  {filteredBooks.length} book{filteredBooks.length !== 1 ? 's' : ''} found
+                </span>
+              </div>
+
+              {filteredBooks.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {purchasedBooksData.map(book => (
+                  {booksWithPurchaseStatus.map(book => (
                     <BookCard
                       key={book.id}
                       book={book}
+                      onPurchase={handlePurchase}
                       onRead={handleRead}
+                      onPreview={(bookId) => {
+                        // For demo, just show the purchase modal
+                        handlePurchase(bookId);
+                      }}
                     />
                   ))}
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <BookOpen className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-muted-foreground">No books in your library yet. Start browsing to purchase your first book!</p>
+                  <Search className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                  <p className="text-muted-foreground mb-2">No books found matching your criteria</p>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setSearchQuery("");
+                      setSelectedCategory("All");
+                    }}
+                  >
+                    Clear Filters
+                  </Button>
                 </div>
               )}
             </div>
-          )}
-
-          {/* Search and Filters */}
-          <div className="mb-8">
-            <div className="flex flex-col sm:flex-row gap-4 mb-6">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                <input
-                  type="text"
-                  placeholder="Search books, authors, or topics..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-              <Button
-                variant="outline"
-                onClick={() => setShowFilters(!showFilters)}
-                className="gap-2"
-              >
-                <Filter className="w-4 h-4" />
-                Filters
-              </Button>
-            </div>
-
-            {/* Category Filters */}
-            {showFilters && (
-              <div className="mb-6 p-4 bg-muted/50 rounded-lg">
-                <h3 className="font-medium mb-3">Categories</h3>
-                <div className="flex flex-wrap gap-2">
-                  {CATEGORIES.map(category => (
-                    <button
-                      key={category}
-                      onClick={() => setSelectedCategory(category)}
-                      className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                        selectedCategory === category
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-background border border-border hover:bg-muted"
-                      }`}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
+        </main>
 
-          {/* Books Grid */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold">
-                {selectedCategory === "All" ? "All Books" : `${selectedCategory} Books`}
-              </h2>
-              <span className="text-muted-foreground">
-                {filteredBooks.length} book{filteredBooks.length !== 1 ? 's' : ''} found
-              </span>
-            </div>
+        {/* Purchase Modal */}
+        {selectedBookForPurchase && (
+          <PurchaseModal
+            book={selectedBookForPurchase}
+            isOpen={!!selectedBookForPurchase}
+            onClose={() => setSelectedBookForPurchase(null)}
+            onPurchaseComplete={handlePurchaseComplete}
+          />
+        )}
 
-            {filteredBooks.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {booksWithPurchaseStatus.map(book => (
-                  <BookCard
-                    key={book.id}
-                    book={book}
-                    onPurchase={handlePurchase}
-                    onRead={handleRead}
-                    onPreview={(bookId) => {
-                      // For demo, just show the purchase modal
-                      handlePurchase(bookId);
-                    }}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <Search className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                <p className="text-muted-foreground mb-2">No books found matching your criteria</p>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setSearchQuery("");
-                    setSelectedCategory("All");
-                  }}
-                >
-                  Clear Filters
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      </main>
-
-      {/* Purchase Modal */}
-      {selectedBookForPurchase && (
-        <PurchaseModal
-          book={selectedBookForPurchase}
-          isOpen={!!selectedBookForPurchase}
-          onClose={() => setSelectedBookForPurchase(null)}
-          onPurchaseComplete={handlePurchaseComplete}
-        />
-      )}
-
-      {/* Book Reader */}
-      {selectedBookForReading && (
-        <BookReader
-          book={selectedBookForReading}
-          initialPage={readingProgress[selectedBookForReading.id]?.page || 0}
-          onClose={() => setSelectedBookForReading(null)}
-          onProgressUpdate={handleProgressUpdate}
-        />
-      )}
+        {/* Book Reader */}
+        {selectedBookForReading && (
+          <BookReader
+            book={selectedBookForReading}
+            initialPage={readingProgress[selectedBookForReading.id]?.page || 0}
+            onClose={() => setSelectedBookForReading(null)}
+            onProgressUpdate={handleProgressUpdate}
+          />
+        )}
+      </ComingSoonOverlay>
     </div>
   );
 }

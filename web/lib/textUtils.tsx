@@ -144,76 +144,120 @@ export function parseAndRenderTextWithHtml(text: string): React.ReactNode[] {
     // Normalize existing HTML tags
     .replace(/<b>(.*?)<\/b>/g, "<strong>$1</strong>");
 
-  // Split by allowed HTML tags while preserving them
-  const parts = processedText.split(/(<\/?(?:strong|em|u|a[^>]*)>)/g);
+  // First, split the entire text by line breaks to preserve original structure
+  const lines = processedText.split('\n');
   const result: React.ReactNode[] = [];
   let keyCounter = 0;
-  let tagStack: string[] = [];
 
-  for (let i = 0; i < parts.length; i++) {
-    const part = parts[i];
+  for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+    const line = lines[lineIndex];
+    
+    // Add line break between lines (except for the first line)
+    if (lineIndex > 0) {
+      result.push(<br key={keyCounter++} />);
+    }
 
-    if (part.startsWith('<')) {
-      // Handle HTML tags
-      if (part.startsWith('</')) {
-        // Closing tag
-        tagStack.pop();
-      } else {
-        // Opening tag
-        const tagMatch = part.match(/<(\w+)(?:\s[^>]*)?>/);
-        if (tagMatch) {
-          tagStack.push(tagMatch[1]);
+    // Handle empty lines - preserve them as empty space
+    if (line.trim() === '') {
+      // For empty lines, we still want to maintain the line structure
+      // The <br> above handles the line break, so we can continue
+      continue;
+    }
+
+    // Process formatting for this specific line
+    const parts = line.split(/(<\/?(?:strong|em|u|a[^>]*)>)/g);
+    const lineElements: React.ReactNode[] = [];
+    let tagStack: string[] = [];
+
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+
+      if (part.startsWith('<')) {
+        // Handle HTML tags
+        if (part.startsWith('</')) {
+          // Closing tag
+          tagStack.pop();
+        } else {
+          // Opening tag
+          const tagMatch = part.match(/<(\w+)(?:\s[^>]*)?>/);
+          if (tagMatch) {
+            tagStack.push(tagMatch[1]);
+          }
         }
+        continue;
       }
-      continue;
+
+      if (part === '') {
+        continue;
+      }
+
+      // Apply formatting based on current tag stack
+      let element: React.ReactNode = part;
+
+      if (tagStack.includes('strong')) {
+        element = <strong key={keyCounter++} className="font-bold">{element}</strong>;
+      }
+      if (tagStack.includes('em')) {
+        element = <em key={keyCounter++} className="italic">{element}</em>;
+      }
+      if (tagStack.includes('u')) {
+        element = <u key={keyCounter++} className="underline">{element}</u>;
+      }
+      if (tagStack.includes('a')) {
+        // Extract href from the opening tag
+        const linkTagIndex = Math.max(0, i - 2);
+        const linkTag = parts[linkTagIndex];
+        const hrefMatch = linkTag?.match(/href="([^"]+)"/);
+        const href = hrefMatch ? hrefMatch[1] : '#';
+        const safe = isSafeUrl(href);
+
+        element = safe ? (
+          <a
+            key={keyCounter++}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent hover:text-accent/80 underline"
+          >
+            {element}
+          </a>
+        ) : (
+          <span key={keyCounter++}>{element as any}</span>
+        );
+      }
+
+      lineElements.push(element);
     }
 
-    if (part.trim() === '') {
-      continue;
-    }
-
-    // Apply formatting based on current tag stack
-    let element: React.ReactNode = part;
-
-    if (tagStack.includes('strong')) {
-      element = <strong key={keyCounter++} className="font-bold">{element}</strong>;
-    }
-    if (tagStack.includes('em')) {
-      element = <em key={keyCounter++} className="italic">{element}</em>;
-    }
-    if (tagStack.includes('u')) {
-      element = <u key={keyCounter++} className="underline">{element}</u>;
-    }
-    if (tagStack.includes('a')) {
-      // Extract href from the previous opening tag
-      const linkTagIndex = Math.max(0, i - 2);
-      const linkTag = parts[linkTagIndex];
-      const hrefMatch = linkTag?.match(/href="([^"]+)"/);
-      const href = hrefMatch ? hrefMatch[1] : '#';
-      const safe = isSafeUrl(href);
-
-      element = safe ? (
-        <a
-          key={keyCounter++}
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-accent hover:text-accent/80 underline"
-        >
-          {element}
-        </a>
-      ) : (
-        <span key={keyCounter++}>{element as any}</span>
-      );
-    }
-
-    result.push(element);
+    // Add all elements from this line to the result
+    result.push(...lineElements);
   }
 
   return result.length > 0 ? result : [<span key="empty">{text}</span>];
 }
 
 // Text manipulation helpers for the editor toolbar
+// Parse prayer content to separate scripture references from main content
+export function parsePrayerContent(content: string): {
+  references: string | null;
+  prayerText: string;
+} {
+  if (!content) return { references: null, prayerText: '' };
+
+  // Look for "References:" at the beginning of the content
+  const referencesMatch = content.match(/^References:\s*([^\n]+(?:\n[^A-Z\n][^\n]*)*)/i);
+  
+  if (referencesMatch) {
+    const references = referencesMatch[0].trim();
+    // Remove the references section from the main content
+    const prayerText = content.replace(referencesMatch[0], '').trim();
+    return { references, prayerText };
+  }
+
+  // If no "References:" section found, return all content as prayer text
+  return { references: null, prayerText: content };
+}
+
 export function insertFormatting(
   text: string,
   selectionStart: number,

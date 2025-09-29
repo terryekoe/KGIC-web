@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { getSupabaseClient } from "@/lib/supabaseClient";
 import { useI18n } from "@/components/ui/i18n-provider";
+import { ComingSoonOverlay } from "@/components/ui/coming-soon-overlay";
 
 export default function DiscoverPage() {
   const supabase = getSupabaseClient();
@@ -160,175 +161,177 @@ export default function DiscoverPage() {
     <div className="min-h-[100svh] bg-background text-foreground">
       <Header />
 
-      <main className="mx-auto max-w-5xl px-6 py-8 space-y-8">
-        <div>
-          <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm mb-4">
-            <ArrowLeft className="w-4 h-4" />
-            {t("common.backToHome")}
-          </Link>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2">{t("discover.title")}</h1>
-          <p className="text-muted-foreground text-lg">{t("discover.subtitle")}</p>
-        </div>
-
-        {/* Announcements */}
-        <section className="rounded-xl border border-border bg-card p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Megaphone className="w-5 h-5 text-accent" />
-            <h2 className="text-xl font-semibold">{t("discover.announcements")}</h2>
+      <ComingSoonOverlay>
+        <main className="mx-auto max-w-5xl px-6 py-8 space-y-8">
+          <div>
+            <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm mb-4">
+              <ArrowLeft className="w-4 h-4" />
+              {t("common.backToHome")}
+            </Link>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2">{t("discover.title")}</h1>
+            <p className="text-muted-foreground text-lg">{t("discover.subtitle")}</p>
           </div>
-          <div className="space-y-4">
-            {loadingDiscover.announcements ? (
-              <p className="text-sm text-muted-foreground">{t("discover.loading")}</p>
-            ) : announcements.length > 0 ? (
-              announcements.map(a => (
-                <div key={a.id} className="rounded-lg border border-border p-4 bg-background">
-                  <h3 className="font-medium">{a.title}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{a.body}</p>
-                  {a.link_url ? (
-                    <div className="mt-3">
-                      <Link href={a.link_url} className="text-sm text-accent hover:underline">{t("discover.learnMore")}</Link>
-                    </div>
-                  ) : null}
+
+          {/* Announcements */}
+          <section className="rounded-xl border border-border bg-card p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Megaphone className="w-5 h-5 text-accent" />
+              <h2 className="text-xl font-semibold">{t("discover.announcements")}</h2>
+            </div>
+            <div className="space-y-4">
+              {loadingDiscover.announcements ? (
+                <p className="text-sm text-muted-foreground">{t("discover.loading")}</p>
+              ) : announcements.length > 0 ? (
+                announcements.map(a => (
+                  <div key={a.id} className="rounded-lg border border-border p-4 bg-background">
+                    <h3 className="font-medium">{a.title}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{a.body}</p>
+                    {a.link_url ? (
+                      <div className="mt-3">
+                        <Link href={a.link_url} className="text-sm text-accent hover:underline">{t("discover.learnMore")}</Link>
+                      </div>
+                    ) : null}
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground">{t("discover.noAnnouncements")}</p>
+              )}
+            </div>
+          </section>
+
+          {/* Latest YouTube */}
+          <section className="rounded-xl border border-border bg-card p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Video className="w-5 h-5 text-accent" />
+              <h2 className="text-xl font-semibold">{t("youtube.latest")}</h2>
+            </div>
+            {YT_VIDEO_ID ? (
+              <div className="aspect-video w-full overflow-hidden rounded-lg border border-border bg-background">
+                <iframe
+                  className="w-full h-full"
+                  src={`https://www.youtube.com/embed/${YT_VIDEO_ID}`}
+                  title="KGIC YouTube"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </div>
+            ) : (
+              <div className="rounded-lg border border-border p-4 bg-background text-sm text-muted-foreground">
+                {t("youtube.connect")}
+                <div className="mt-2">
+                  <Link href={YT_CHANNEL_URL} className="text-accent hover:underline">{t("youtube.openChannel")}</Link>
                 </div>
-              ))
-            ) : (
-              <p className="text-sm text-muted-foreground">{t("discover.noAnnouncements")}</p>
-            )}
-          </div>
-        </section>
-
-        {/* Latest YouTube */}
-        <section className="rounded-xl border border-border bg-card p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Video className="w-5 h-5 text-accent" />
-            <h2 className="text-xl font-semibold">{t("youtube.latest")}</h2>
-          </div>
-          {YT_VIDEO_ID ? (
-            <div className="aspect-video w-full overflow-hidden rounded-lg border border-border bg-background">
-              <iframe
-                className="w-full h-full"
-                src={`https://www.youtube.com/embed/${YT_VIDEO_ID}`}
-                title="KGIC YouTube"
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
-            </div>
-          ) : (
-            <div className="rounded-lg border border-border p-4 bg-background text-sm text-muted-foreground">
-              {t("youtube.connect")}
-              <div className="mt-2">
-                <Link href={YT_CHANNEL_URL} className="text-accent hover:underline">{t("youtube.openChannel")}</Link>
               </div>
-            </div>
-          )}
-        </section>
-
-        {/* Latest Morning Prayer */}
-        <section className="rounded-xl border border-border bg-card p-6">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <CalendarDays className="w-5 h-5 text-accent" />
-              <h2 className="text-xl font-semibold">{t("nav.prayers")}</h2>
-            </div>
-            <Link href="/prayers" className="text-sm text-accent hover:underline">{t("common.viewAll")}</Link>
-          </div>
-          <div className="rounded-lg border border-border p-4 bg-background">
-            {loading.prayer ? (
-              <p className="text-sm text-muted-foreground">{t("prayers.loadingLatest")}</p>
-            ) : latestPrayer ? (
-              <div>
-                <h3 className="font-medium">{latestPrayer.title}</h3>
-                <p className="text-sm text-muted-foreground mt-1">{latestPrayer.excerpt || ""}</p>
-                <p className="text-xs text-muted-foreground mt-2">{latestPrayer.date}</p>
-              </div>
-            ) : (
-              <p className="text-sm text-muted-foreground">{t("prayers.none")}</p>
             )}
-          </div>
-        </section>
+          </section>
 
-        {/* Latest Podcast */}
-        <section className="rounded-xl border border-border bg-card p-6">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <Play className="w-5 h-5 text-accent" />
-              <h2 className="text-xl font-semibold">{t("podcasts.latest")}</h2>
+          {/* Latest Morning Prayer */}
+          <section className="rounded-xl border border-border bg-card p-6">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <CalendarDays className="w-5 h-5 text-accent" />
+                <h2 className="text-xl font-semibold">{t("nav.prayers")}</h2>
+              </div>
+              <Link href="/prayers" className="text-sm text-accent hover:underline">{t("common.viewAll")}</Link>
             </div>
-            <Link href="/podcasts" prefetch={false} className="text-sm text-accent hover:underline">{t("common.viewAll")}</Link>
-          </div>
-          <div className="rounded-lg border border-border p-4 bg-background">
-            {loading.podcast ? (
-              <p className="text-sm text-muted-foreground">{t("podcasts.loadingLatest")}</p>
-            ) : latestPodcast ? (
-              <div className="flex items-start justify-between gap-3">
+            <div className="rounded-lg border border-border p-4 bg-background">
+              {loading.prayer ? (
+                <p className="text-sm text-muted-foreground">{t("prayers.loadingLatest")}</p>
+              ) : latestPrayer ? (
                 <div>
-                  <h3 className="font-medium">{latestPodcast.title}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{latestPodcast.artist || t("podcasts.artistDefault")}</p>
-                  <p className="text-xs text-muted-foreground mt-2">{formatDate(latestPodcast.date)} {latestPodcast.duration ? `• ${latestPodcast.duration}` : ""}</p>
+                  <h3 className="font-medium">{latestPrayer.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-1">{latestPrayer.excerpt || ""}</p>
+                  <p className="text-xs text-muted-foreground mt-2">{latestPrayer.date}</p>
                 </div>
-                <div className="shrink-0">
-                  <Link href="/podcasts" prefetch={false} className="inline-flex items-center text-sm rounded-full bg-accent text-accent-foreground px-3 py-1.5 hover:opacity-90">{t("podcasts.listen")}</Link>
-                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">{t("prayers.none")}</p>
+              )}
+            </div>
+          </section>
+
+          {/* Latest Podcast */}
+          <section className="rounded-xl border border-border bg-card p-6">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Play className="w-5 h-5 text-accent" />
+                <h2 className="text-xl font-semibold">{t("podcasts.latest")}</h2>
               </div>
-            ) : (
-              <p className="text-sm text-muted-foreground">{t("podcasts.none")}</p>
-            )}
-          </div>
-        </section>
-
-        {/* Ministries / Serving */}
-        <section className="rounded-xl border border-border bg-card p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Church className="w-5 h-5 text-accent" />
-            <h2 className="text-xl font-semibold">{t("discover.ministriesHeading")}</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-4">
-            {loadingDiscover.ministries ? (
-              <div className="rounded-lg border border-border p-4 bg-background text-sm text-muted-foreground">{t("discover.loadingMinistries")}</div>
-            ) : ministries.length > 0 ? (
-              ministries.map(m => (
-                <div key={m.id} className="rounded-lg border border-border p-4 bg-background">
-                  <h3 className="font-medium">{m.name}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{m.short_desc}</p>
+              <Link href="/podcasts" prefetch={false} className="text-sm text-accent hover:underline">{t("common.viewAll")}</Link>
+            </div>
+            <div className="rounded-lg border border-border p-4 bg-background">
+              {loading.podcast ? (
+                <p className="text-sm text-muted-foreground">{t("podcasts.loadingLatest")}</p>
+              ) : latestPodcast ? (
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="font-medium">{latestPodcast.title}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{latestPodcast.artist || t("podcasts.artistDefault")}</p>
+                    <p className="text-xs text-muted-foreground mt-2">{formatDate(latestPodcast.date)} {latestPodcast.duration ? `• ${latestPodcast.duration}` : ""}</p>
+                  </div>
+                  <div className="shrink-0">
+                    <Link href="/podcasts" prefetch={false} className="inline-flex items-center text-sm rounded-full bg-accent text-accent-foreground px-3 py-1.5 hover:opacity-90">{t("podcasts.listen")}</Link>
+                  </div>
                 </div>
-              ))
-            ) : (
-              <div className="rounded-lg border border-border p-4 bg-background text-sm text-muted-foreground">{t("discover.noMinistries")}</div>
-            )}
-          </div>
-          <div className="mt-4">
-            <Link href="/contact" className="text-sm text-accent hover:underline">{t("discover.serveCta")}</Link>
-          </div>
-        </section>
+              ) : (
+                <p className="text-sm text-muted-foreground">{t("podcasts.none")}</p>
+              )}
+            </div>
+          </section>
 
-        {/* Small Groups */}
-        <section className="rounded-xl border border-border bg-card p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Users className="w-5 h-5 text-accent" />
-            <h2 className="text-xl font-semibold">{t("discover.groupsHeading")}</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-4">
-            {loadingDiscover.groups ? (
-              <div className="rounded-lg border border-border p-4 bg-background text-sm text-muted-foreground">{t("discover.loadingGroups")}</div>
-            ) : smallGroups.length > 0 ? (
-              smallGroups.map(g => (
-                <div key={g.id} className="rounded-lg border border-border p-4 bg-background">
-                  <h3 className="font-medium">{g.name}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{g.schedule}</p>
-                </div>
-              ))
-            ) : (
-              <div className="rounded-lg border border-border p-4 bg-background text-sm text-muted-foreground">{t("discover.noGroups")}</div>
-            )}
-          </div>
-          <div className="mt-4">
-            <Link href="/contact" className="text-sm text-accent hover:underline">{t("discover.findGroupCta")}</Link>
-          </div>
-        </section>
-      </main>
+          {/* Ministries / Serving */}
+          <section className="rounded-xl border border-border bg-card p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Church className="w-5 h-5 text-accent" />
+              <h2 className="text-xl font-semibold">{t("discover.ministriesHeading")}</h2>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {loadingDiscover.ministries ? (
+                <div className="rounded-lg border border-border p-4 bg-background text-sm text-muted-foreground">{t("discover.loadingMinistries")}</div>
+              ) : ministries.length > 0 ? (
+                ministries.map(m => (
+                  <div key={m.id} className="rounded-lg border border-border p-4 bg-background">
+                    <h3 className="font-medium">{m.name}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{m.short_desc}</p>
+                  </div>
+                ))
+              ) : (
+                <div className="rounded-lg border border-border p-4 bg-background text-sm text-muted-foreground">{t("discover.noMinistries")}</div>
+              )}
+            </div>
+            <div className="mt-4">
+              <Link href="/contact" className="text-sm text-accent hover:underline">{t("discover.serveCta")}</Link>
+            </div>
+          </section>
 
-      <Footer />
+          {/* Small Groups */}
+          <section className="rounded-xl border border-border bg-card p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Users className="w-5 h-5 text-accent" />
+              <h2 className="text-xl font-semibold">{t("discover.groupsHeading")}</h2>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {loadingDiscover.groups ? (
+                <div className="rounded-lg border border-border p-4 bg-background text-sm text-muted-foreground">{t("discover.loadingGroups")}</div>
+              ) : smallGroups.length > 0 ? (
+                smallGroups.map(g => (
+                  <div key={g.id} className="rounded-lg border border-border p-4 bg-background">
+                    <h3 className="font-medium">{g.name}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{g.schedule}</p>
+                  </div>
+                ))
+              ) : (
+                <div className="rounded-lg border border-border p-4 bg-background text-sm text-muted-foreground">{t("discover.noGroups")}</div>
+              )}
+            </div>
+            <div className="mt-4">
+              <Link href="/contact" className="text-sm text-accent hover:underline">{t("discover.findGroupCta")}</Link>
+            </div>
+          </section>
+        </main>
+
+        <Footer />
+      </ComingSoonOverlay>
     </div>
   );
 }

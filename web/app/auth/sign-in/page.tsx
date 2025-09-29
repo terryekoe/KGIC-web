@@ -55,12 +55,11 @@ function SignInInner() {
     }
 
     const result = await safeSupabaseAuth(
-      () => supabase.auth.signInWithPassword({ email, password }),
-      { data: null, error: { message: 'Network error occurred. Please try again.' } }
+      () => supabase.auth.signInWithPassword({ email, password })
     );
     
     if (!result || result.error) {
-      setError(result?.error?.message || 'Authentication failed. Please try again.');
+      setError(result?.error?.message || 'Network error occurred. Please try again.');
       setLoading(false);
       return;
     }

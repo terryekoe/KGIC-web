@@ -32,8 +32,7 @@ function AdminTopBar() {
 
     // Get initial session with error handling
     safeSupabaseAuth(
-      () => supabase.auth.getSession(),
-      { data: { session: null } }
+      () => supabase.auth.getSession()
     ).then((result) => {
       const session = result?.data?.session ?? null;
       setUser(session?.user ?? null);
@@ -457,9 +456,14 @@ function AdminPodcasts() {
   const [uploading, setUploading] = React.useState<boolean>(false);
   const [uploadError, setUploadError] = React.useState<string | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+  // Cover art upload state
+  const [coverArtUploading, setCoverArtUploading] = React.useState<boolean>(false);
+  const [coverArtUploadError, setCoverArtUploadError] = React.useState<string | null>(null);
+  const coverArtInputRef = React.useRef<HTMLInputElement | null>(null);
   const [title, setTitle] = React.useState("");
   const [artist, setArtist] = React.useState("");
   const [audioUrl, setAudioUrl] = React.useState("");
+  const [imageUrl, setImageUrl] = React.useState("");
   const [duration, setDuration] = React.useState<string>("");
   const [status, setStatus] = React.useState<string>("published");
   const [publishedAt, setPublishedAt] = React.useState<string>("");
@@ -487,6 +491,7 @@ function AdminPodcasts() {
     setTitle("");
     setArtist("");
     setAudioUrl("");
+    setImageUrl("");
     setDuration("");
     setStatus("published");
     setPublishedAt("");
@@ -540,6 +545,7 @@ function AdminPodcasts() {
       description: description || null,
       artist: artist || null,
       audio_url: audioUrl,
+      image_url: imageUrl || null,
       duration_seconds: toIntOrNull(duration),
       status,
       published_at: publishedISO,
@@ -569,6 +575,7 @@ function AdminPodcasts() {
     setTitle(p.title || "");
     setArtist(p.artist || "");
     setAudioUrl(p.audio_url || "");
+    setImageUrl(p.image_url || "");
     setDuration(p.duration_seconds != null ? String(p.duration_seconds) : "");
     setStatus(p.status || "draft");
     setPublishedAt(p.published_at ? p.published_at.substring(0, 16) : "");
@@ -672,6 +679,63 @@ function AdminPodcasts() {
     }
   };
 
+  // Cover art upload handler
+  const handleCoverArtFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Validate image format
+    const ext = (file.name?.split(".").pop() || "").toLowerCase();
+    const mime = file.type;
+    const allowedExts = ["jpg", "jpeg", "png", "webp"];
+    const allowedMimes = ["image/jpeg", "image/png", "image/webp"];
+    
+    if (!allowedExts.includes(ext) || !allowedMimes.includes(mime)) {
+      setCoverArtUploadError("Unsupported image format. Please upload JPG, PNG, or WebP.");
+      if (coverArtInputRef.current) coverArtInputRef.current.value = "";
+      return;
+    }
+
+    // Check file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setCoverArtUploadError("File too large. Maximum size is 5MB.");
+      if (coverArtInputRef.current) coverArtInputRef.current.value = "";
+      return;
+    }
+
+    setCoverArtUploadError(null);
+    setCoverArtUploading(true);
+    
+    try {
+      const form = new FormData();
+      form.append("file", file);
+
+      const res = await fetch("/api/podcasts/cover-art", {
+        method: "POST",
+        body: form,
+      });
+      
+      if (!res.ok) {
+        const txt = await res.text().catch(() => "");
+        throw new Error(txt || `Upload failed with status ${res.status}`);
+      }
+      
+      const data: { publicUrl?: string; path?: string; error?: string } = await res.json();
+      if (data.error) throw new Error(data.error);
+      
+      if (data.publicUrl) {
+        setImageUrl(data.publicUrl);
+        setSuccess("Cover art uploaded successfully. URL set.");
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to upload cover art.";
+      setCoverArtUploadError(message);
+    } finally {
+      setCoverArtUploading(false);
+      if (coverArtInputRef.current) coverArtInputRef.current.value = "";
+    }
+  };
+
   return (
     <Card className="border-border bg-card">
       <CardHeader>
@@ -682,6 +746,7 @@ function AdminPodcasts() {
           {error && <p className="text-sm text-destructive">{error}</p>}
           {success && <p className="text-sm text-green-600">{success}</p>}
           {uploadError && <p className="text-sm text-destructive">{uploadError}</p>}
+          {coverArtUploadError && <p className="text-sm text-destructive">{coverArtUploadError}</p>}
 
           <div className="grid sm:grid-cols-2 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -703,6 +768,34 @@ function AdminPodcasts() {
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">You can paste a URL or upload an audio file. Recommended formats: MP3 or M4A for the widest browser support. OGG/OPUS may not play on iOS Safari.</p>
+            </div>
+            <div className="space-y-2 md:col-span-2">
+              <label className="text-sm text-muted-foreground" htmlFor="p_image">Cover Art</label>
+              <div className="flex items-start gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <Input id="p_image" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://... .jpg" />
+                    <input ref={coverArtInputRef} type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" className="hidden" onChange={handleCoverArtFileChange} />
+                    <Button type="button" variant="outline" className="gap-2 shrink-0" onClick={() => coverArtInputRef.current?.click()} disabled={coverArtUploading}>
+                      {coverArtUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Image className="h-4 w-4" />}
+                      {coverArtUploading ? "Uploading..." : "Upload"}
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">You can paste a URL or upload an image file. Supported formats: JPG, PNG, WebP. Max size: 5MB.</p>
+                </div>
+                {imageUrl && (
+                  <div className="w-20 h-20 rounded-lg overflow-hidden border border-border bg-muted flex-shrink-0">
+                    <NextImage
+                      src={imageUrl}
+                      alt="Cover art preview"
+                      width={80}
+                      height={80}
+                      className="w-full h-full object-cover"
+                      onError={() => setImageUrl("")}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
             <div className="space-y-2">
               <label className="text-sm text-muted-foreground" htmlFor="p_duration">Duration (seconds)</label>
@@ -762,14 +855,27 @@ function AdminPodcasts() {
             <div className="space-y-3">
               {podcasts.map((p) => (
                 <div key={p.id} className="rounded-lg border border-border p-4 bg-card flex items-start justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground">{p.status}</span>
-                      {p.published_at && <span className="text-xs text-muted-foreground">• {p.published_at.substring(0,16).replace('T',' ')}</span>}
+                  <div className="flex items-start gap-4 flex-1">
+                    {p.image_url && (
+                      <div className="w-16 h-16 rounded-lg overflow-hidden border border-border bg-muted flex-shrink-0">
+                        <NextImage
+                          src={p.image_url}
+                          alt={`${p.title} cover art`}
+                          width={64}
+                          height={64}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted-foreground">{p.status}</span>
+                        {p.published_at && <span className="text-xs text-muted-foreground">• {p.published_at.substring(0,16).replace('T',' ')}</span>}
+                      </div>
+                      <p className="font-medium">{p.title}</p>
+                      {p.description && <p className="text-sm text-muted-foreground mt-1">{p.description}</p>}
+                      <p className="text-xs text-muted-foreground mt-1">{p.artist || 'KGIC'} • {p.duration_seconds ? `${Math.floor(p.duration_seconds/60)}:${String(p.duration_seconds%60).padStart(2,'0')}` : '—:—'}</p>
                     </div>
-                    <p className="font-medium">{p.title}</p>
-                    {p.description && <p className="text-sm text-muted-foreground mt-1">{p.description}</p>}
-                    <p className="text-xs text-muted-foreground mt-1">{p.artist || 'KGIC'} • {p.duration_seconds ? `${Math.floor(p.duration_seconds/60)}:${String(p.duration_seconds%60).padStart(2,'0')}` : '—:—'}</p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     {p.status !== "published" && (
@@ -1909,8 +2015,7 @@ export default function AdminPage() {
 
     // Initial session check with error handling
     safeSupabaseAuth(
-      () => supabase.auth.getSession(),
-      { data: { session: null } }
+      () => supabase.auth.getSession()
     ).then((result) => {
       const session = result?.data?.session ?? null;
       if (session?.user) {
