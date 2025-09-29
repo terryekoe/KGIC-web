@@ -26,6 +26,18 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL('https://thekingsgenerals.com'),
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+    other: [
+      {
+        rel: 'icon',
+        type: 'image/svg+xml',
+        url: '/logo.png',
+      },
+    ],
+  },
   alternates: {
     canonical: '/',
     languages: {
@@ -41,11 +53,20 @@ export const metadata: Metadata = {
     siteName: "The King's Generals International Church",
     locale: 'en_US',
     type: 'website',
+    images: [
+      {
+        url: '/logo.png',
+        width: 1200,
+        height: 630,
+        alt: "The King's Generals International Church Logo",
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: "The King's Generals International Church",
     description: "responsible kingdom labourers - Experience God's word through inspiring messages, prayers, and community",
+    images: ['/logo.png'],
   },
   robots: {
     index: true,
