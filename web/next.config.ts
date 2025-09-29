@@ -31,15 +31,7 @@ const nextConfig: NextConfig = {
   experimental: {
     // Enable optimized package imports
     optimizePackageImports: ['lucide-react', '@supabase/supabase-js'],
-    // Enable turbo mode for faster builds
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
+    // Remove turbo configuration that was causing issues
   },
   
   // Webpack optimizations

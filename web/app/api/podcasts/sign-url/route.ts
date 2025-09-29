@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+// Force Node.js runtime for Supabase compatibility
+export const runtime = 'nodejs';
+
 // POST { url?: string, path?: string }
 // Returns { url: string } where url is a signed, time-limited URL for playback
 export async function POST(request: Request) {

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 
+// Force Node.js runtime to avoid Edge Runtime issues with Supabase
+export const runtime = 'nodejs';
+
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
 

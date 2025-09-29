@@ -10,10 +10,10 @@ export function PerformanceMonitor() {
 
     // Track Core Web Vitals
     const trackWebVitals = async () => {
-      const { getCLS, getFID, getFCP, getLCP, getTTFB } = await import('web-vitals');
+      const { onCLS, onFID, onFCP, onLCP, onTTFB } = await import('web-vitals');
 
       // Cumulative Layout Shift
-      getCLS((metric: any) => {
+      onCLS((metric: any) => {
         console.log('CLS:', metric);
         // Send to analytics service
         if (typeof window !== 'undefined' && window.gtag) {
@@ -27,7 +27,7 @@ export function PerformanceMonitor() {
       });
 
       // First Input Delay
-      getFID((metric: any) => {
+      onFID((metric: any) => {
         console.log('FID:', metric);
         if (typeof window !== 'undefined' && window.gtag) {
           window.gtag('event', 'web_vitals', {
@@ -40,7 +40,7 @@ export function PerformanceMonitor() {
       });
 
       // First Contentful Paint
-      getFCP((metric: any) => {
+      onFCP((metric: any) => {
         console.log('FCP:', metric);
         if (typeof window !== 'undefined' && window.gtag) {
           window.gtag('event', 'web_vitals', {
@@ -53,7 +53,7 @@ export function PerformanceMonitor() {
       });
 
       // Largest Contentful Paint
-      getLCP((metric: any) => {
+      onLCP((metric: any) => {
         console.log('LCP:', metric);
         if (typeof window !== 'undefined' && window.gtag) {
           window.gtag('event', 'web_vitals', {
@@ -66,7 +66,7 @@ export function PerformanceMonitor() {
       });
 
       // Time to First Byte
-      getTTFB((metric: any) => {
+      onTTFB((metric: any) => {
         console.log('TTFB:', metric);
         if (typeof window !== 'undefined' && window.gtag) {
           window.gtag('event', 'web_vitals', {
@@ -144,10 +144,10 @@ export function PerformanceMonitor() {
     trackWebVitals();
     
     // Track after page load
-    if (document.readyState === 'complete') {
+    if (typeof document !== 'undefined' && document.readyState === 'complete') {
       trackPageLoad();
       trackResources();
-    } else {
+    } else if (typeof window !== 'undefined') {
       window.addEventListener('load', () => {
         setTimeout(() => {
           trackPageLoad();
@@ -157,7 +157,7 @@ export function PerformanceMonitor() {
     }
 
     // Track memory usage (if available)
-    if ('memory' in performance) {
+    if (typeof window !== 'undefined' && 'memory' in performance) {
       const memoryInfo = (performance as any).memory;
       console.log('Memory Usage:', {
         used: Math.round(memoryInfo.usedJSHeapSize / 1048576), // MB

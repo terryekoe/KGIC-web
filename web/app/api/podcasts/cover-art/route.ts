@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+// Force Node.js runtime for Supabase compatibility
+export const runtime = 'nodejs';
+
 // Server route to handle podcast cover art uploads
 export async function POST(request: Request) {
   try {
